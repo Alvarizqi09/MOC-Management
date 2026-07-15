@@ -7,7 +7,7 @@ import { useAuthStore } from '@/store/useAuthStore'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import logoImage from '@/assets/logo.png'
-import fallbackImage from '@/assets/fallback.png'
+import fallbackImage from '@/assets/logo-dark.svg'
 import { apiClient } from '@/lib/axios-instance'
 
 export function SignupPage() {

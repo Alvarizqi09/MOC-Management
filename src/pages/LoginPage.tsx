@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { MOCK_CREDENTIALS } from '@/lib/mock-api/auth.mock'
 import logoImage from '@/assets/logo.png'
-import fallbackImage from '@/assets/fallback.png'
+import fallbackImage from '@/assets/logo-dark.svg'
 
 export function LoginPage() {
   const navigate = useNavigate()

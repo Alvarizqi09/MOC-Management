@@ -4,7 +4,7 @@ import { useAuthStore } from '@/store/useAuthStore'
 import { useUIStore } from '@/store/useUIStore'
 import { Button } from '@/components/ui/Button'
 import logoImage from '@/assets/logo.png'
-import fallbackImage from '@/assets/fallback.png'
+import fallbackImage from '@/assets/logo-dark.svg'
 
 export function Sidebar() {
   const navigate = useNavigate()
