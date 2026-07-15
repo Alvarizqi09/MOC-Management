@@ -3,8 +3,8 @@ import { LayoutDashboard, CalendarDays, Plus, LogOut, User, Settings } from 'luc
 import { useAuthStore } from '@/store/useAuthStore'
 import { useUIStore } from '@/store/useUIStore'
 import { Button } from '@/components/ui/Button'
-import logoImage from '@/assets/logo.png'
-import fallbackImage from '@/assets/logo-dark.svg'
+import logoImage from '@/assets/logo-dark.svg'
+import logoDarkImage from '@/assets/fallback.svg'
 
 export function Sidebar() {
   const navigate = useNavigate()
@@ -20,8 +20,8 @@ export function Sidebar() {
     <aside className="flex h-screen w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm">
       <div className="flex h-16 items-center border-b border-slate-100 px-6">
         <div className="flex items-center gap-3">
-          <img src={logoImage} alt="TaskFlow" className="h-8 w-auto object-contain dark:hidden" />
-          <img src={fallbackImage} alt="TaskFlow" className="h-8 w-auto object-contain hidden dark:block" />
+          <img src={logoImage} alt="TaskFlow" className="h-8 w-auto dark:hidden" />
+          <img src={logoDarkImage} alt="TaskFlow" className="h-8 w-auto hidden dark:block" />
           <span className="font-bold text-slate-900 dark:text-white tracking-tight">TaskFlow</span>
         </div>
       </div>

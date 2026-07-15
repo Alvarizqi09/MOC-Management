@@ -11,8 +11,8 @@ import { getErrorMessage } from '@/lib/utils/axios-error'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { MOCK_CREDENTIALS } from '@/lib/mock-api/auth.mock'
-import logoImage from '@/assets/logo.png'
-import fallbackImage from '@/assets/logo-dark.svg'
+import logoImage from '@/assets/logo-dark.svg'
+import logoDarkImage from '@/assets/fallback.svg'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -47,7 +47,7 @@ export function LoginPage() {
       <div className="w-full max-w-md space-y-8 animate-fade-in">
         <div className="flex flex-col items-center">
           <img src={logoImage} alt="TaskFlow" className="h-16 w-auto object-contain mb-4 dark:hidden" />
-          <img src={fallbackImage} alt="TaskFlow" className="h-16 w-auto object-contain mb-4 hidden dark:block" />
+          <img src={logoDarkImage} alt="TaskFlow" className="h-16 w-auto object-contain mb-4 hidden dark:block" />
           <h2 className="text-center text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
             Login ke Akun
           </h2>
