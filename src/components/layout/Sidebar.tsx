@@ -3,6 +3,7 @@ import { LayoutDashboard, CalendarDays, Plus, LogOut, User } from 'lucide-react'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useUIStore } from '@/store/useUIStore'
 import { Button } from '@/components/ui/Button'
+import logoImage from '@/assets/logo.png'
 
 export function Sidebar() {
   const navigate = useNavigate()
@@ -18,9 +19,7 @@ export function Sidebar() {
     <aside className="flex h-screen w-64 flex-col border-r border-slate-200 bg-white shadow-sm">
       <div className="flex h-16 items-center border-b border-slate-100 px-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-red-600 to-orange-500 font-bold text-white">
-            TF
-          </div>
+          <img src={logoImage} alt="TaskFlow" className="h-8 w-auto object-contain" />
           <span className="font-bold text-slate-900 tracking-tight">TaskFlow</span>
         </div>
       </div>

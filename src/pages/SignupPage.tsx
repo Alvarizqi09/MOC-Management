@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/useAuthStore'
 import { generateMockToken } from '@/lib/mock-api/auth.mock'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
+import logoImage from '@/assets/logo.png'
 
 export function SignupPage() {
   const navigate = useNavigate()
@@ -36,8 +37,8 @@ export function SignupPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-orange-50/30 to-red-50/20 p-4">
       <div className="animate-zoom-in w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-red-600 to-orange-500 text-xl font-bold text-white shadow-lg">
-            TF
+          <div className="mx-auto mb-4 flex h-20 w-auto items-center justify-center">
+            <img src={logoImage} alt="TaskFlow Logo" className="h-full w-auto object-contain" />
           </div>
           <h1 className="text-2xl font-bold text-slate-900">TaskFlow Manager</h1>
           <p className="mt-1 text-sm text-slate-500">

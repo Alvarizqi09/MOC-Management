@@ -20,6 +20,8 @@ Buka [http://localhost:5173](http://localhost:5173)
 | Username | `admin`    |
 | Password | `admin123` |
 
+Atau Anda juga dapat mendaftar (Sign Up) untuk membuat kredensial baru.
+
 ### Scripts
 
 | Command         | Deskripsi              |
@@ -42,6 +44,7 @@ Buka [http://localhost:5173](http://localhost:5173)
 - **@dnd-kit** — drag-and-drop Kanban
 - **date-fns** — due date & timeline
 - **sonner** — toast notifications
+- **lucide-react** — icons
 
 ---
 
@@ -53,23 +56,24 @@ Pemisahan tegas tiga lapisan:
 src/
 ├── components/     # UI Layer — render & interaksi, tidak tahu localStorage
 │   ├── board/      # KanbanBoard, KanbanColumn, TaskCard
-│   ├── task/       # TaskFormModal, TaskDetail
+│   ├── task/       # TaskFormModal, TaskEditModal
 │   ├── search/     # SearchBar, FilterTabs
 │   ├── bulk/       # BulkActionBar, SelectAllCheckbox
 │   ├── timeline/   # TimelineView
-│   ├── layout/     # Header, ProtectedRoute
-│   └── ui/         # Button, Input, Modal, Skeleton
+│   ├── layout/     # Sidebar, DashboardLayout, ProtectedRoute
+│   └── ui/         # Button, Input, Modal, Skeleton, AlertDialog
+├── pages/          # Page Layer — BoardPage, TimelinePage, TaskDetailPage, LoginPage, SignupPage
 ├── hooks/          # Custom hooks (React Query, optimistic update, bulk select)
 ├── store/          # Zustand — auth, filter, selection state
 ├── lib/
 │   ├── axios-instance.ts   # Axios + auth interceptor
-│   ├── mock-api/           # Mock API Layer (delay, error sim, routing)
+│   ├── mock-api/           # Mock API Layer (delay, error sim, routing, auth)
 │   └── validators/         # Zod schemas
 ├── storage/        # db.ts — abstraksi localStorage (hanya dipanggil Mock API)
 └── types/          # TypeScript interfaces
 ```
 
-### UI Layer (`components/`)
+### UI Layer (`components/` & `pages/`)
 
 Komponen murni presentational + interaksi. Tidak pernah memanggil `localStorage` atau mengetahui detail penyimpanan data.
 
@@ -85,14 +89,16 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 - Delay 800–1000ms per request
 - ~10% error rate pada mutasi (create/update/delete)
 - Validasi token mock via axios interceptor
-- Kredensial hardcoded di `auth.mock.ts`
+- Mock routing untuk login, registrasi (signup), dan CRUD task
 
 ---
 
 ## Fitur
 
-- **Login mock** dengan session persist (refresh halaman tetap login)
+- **Autentikasi** — Login, pendaftaran akun baru (Signup), dengan session persist
+- **Layout Modern** — Menggunakan Sidebar navigasi yang responsif
 - **Kanban board** 3 kolom (To Do / In Progress / Done) dengan drag-and-drop
+- **Detail Task** — Halaman khusus detail task dengan struktur tab (Info, Aktivitas, Komentar)
 - **Optimistic updates** — kartu langsung pindah kolom, rollback otomatis jika API gagal
 - **CRUD task** — create, edit, delete, mark as done
 - **Global search** — cari by ticket ID (`TASKFLOW-1042` atau `1042`), judul, deskripsi
@@ -104,7 +110,7 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 
 ## Asumsi
 
-1. **Kredensial hardcoded** (`admin` / `admin123`) — tidak ada registrasi atau reset password.
+1. **Kredensial Default** disediakan (`admin` / `admin123`), namun pendaftaran akun baru juga bisa dilakukan via Mock API.
 2. **Token mock** tidak memiliki expiry sungguhan; invalidasi hanya jika token kosong atau format tidak valid (`mock-token-*`).
 3. **Data task** disimpan di `localStorage` browser — clearing storage = kehilangan data.
 4. **Error simulasi 10%** hanya pada mutasi, untuk demonstrasi error handling & rollback.
