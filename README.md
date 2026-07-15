@@ -1,8 +1,6 @@
 # TaskFlow Manager
 
-Aplikasi manajemen task berbasis Kanban (gaya Trello/Jira) untuk **Master Online Community Management (MOC)** — technical test Frontend Developer.
-
-Berjalan **100% offline** dengan simulasi API server: latensi jaringan, autentikasi token, dan error acak pada mutasi.
+Aplikasi manajemen task berbasis Kanban (gaya Trello/Jira) untuk **Master Online Community (MOC)** — technical test Frontend Developer.
 
 > **⚠️ PERHATIAN UNTUK PENILAI (TESTER):**  
 > Aplikasi ini sengaja disimulasikan memiliki **10% kemungkinan *error* (gagal)** setiap kali Anda membuat, mengedit, atau menghapus task (Mutasi). Hal ini dibuat secara sengaja di dalam *Mock API Layer* untuk mendemonstrasikan fitur *Error Handling*, *Toast Notification*, dan ***Rollback* otomatis** pada *Optimistic Update*. Jadi, jika sewaktu-waktu Anda mendapat notifikasi merah "Gagal menyimpan/memperbarui task", **itu bukanlah sebuah *bug***, melainkan fitur simulasi server. Silakan coba klik sekali lagi.
