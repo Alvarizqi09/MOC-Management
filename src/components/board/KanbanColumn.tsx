@@ -77,7 +77,7 @@ export function KanbanColumn({
                 task={task}
                 isSelected={isSelected(task.id)}
                 onToggleSelect={onToggleSelect}
-                onClick={onTaskClick}
+                onEdit={onTaskClick}
                 isShake={task.id === failedDragId}
               />
             ))}

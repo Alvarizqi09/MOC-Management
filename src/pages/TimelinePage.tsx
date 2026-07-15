@@ -60,9 +60,6 @@ export function TimelinePage() {
         <TimelineView tasks={filteredTasks} onTaskClick={setSelectedTask} />
       )}
 
-      {isFetching && !isLoading ? (
-        <p className="mt-4 text-center text-xs text-slate-400">Memuat ulang...</p>
-      ) : null}
     </div>
   )
 }

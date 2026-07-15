@@ -14,13 +14,13 @@ import { useOptimisticTaskUpdate } from '@/hooks/useOptimisticTask'
 import { PRIORITY_CONFIG, type Task } from '@/types/task.types'
 import { AlertDialog } from '@/components/ui/AlertDialog'
 
-interface TaskDetailProps {
+interface TaskEditModalProps {
   task: Task | null
   isOpen: boolean
   onClose: () => void
 }
 
-export function TaskDetail({ task, isOpen, onClose }: TaskDetailProps) {
+export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
   const optimisticUpdate = useOptimisticTaskUpdate()
   const deleteTask = useDeleteTask()
 
@@ -80,7 +80,7 @@ export function TaskDetail({ task, isOpen, onClose }: TaskDetailProps) {
   const isLoading = optimisticUpdate.isPending || deleteTask.isPending
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Detail Task" size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} title="Edit Task" size="lg">
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <span className="rounded-md bg-slate-100 px-2 py-1 font-mono text-xs text-slate-600">
           {task.ticketId}

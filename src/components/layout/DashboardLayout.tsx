@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { TaskFormModal } from '@/components/task/TaskFormModal'
-import { TaskDetail } from '@/components/task/TaskDetail'
+import { TaskEditModal } from '@/components/task/TaskEditModal'
 import { useUIStore } from '@/store/useUIStore'
 
 export function DashboardLayout() {
@@ -26,7 +26,7 @@ export function DashboardLayout() {
         onClose={() => setIsCreateOpen(false)}
       />
 
-      <TaskDetail
+      <TaskEditModal
         task={selectedTask}
         isOpen={!!selectedTask}
         onClose={() => setSelectedTask(null)}

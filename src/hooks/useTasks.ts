@@ -21,6 +21,18 @@ export function useTasks() {
   })
 }
 
+export function useTask(id: string | undefined) {
+  return useQuery({
+    queryKey: [...TASKS_QUERY_KEY, id],
+    queryFn: async () => {
+      if (!id) throw new Error('ID is required')
+      const { data } = await apiClient.get<Task>(`/tasks/${id}`)
+      return data
+    },
+    enabled: !!id,
+  })
+}
+
 export function useLogin() {
   return useMutation({
     mutationFn: async (credentials: LoginFormValues) => {

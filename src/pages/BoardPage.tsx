@@ -99,9 +99,7 @@ export function BoardPage() {
         </div>
       )}
 
-      {isFetching && !isLoading ? (
-        <p className="mt-4 shrink-0 text-center text-xs text-slate-400">Memuat ulang...</p>
-      ) : null}
+
 
       <BulkActionBar
         selectedCount={selectedCount}

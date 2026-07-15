@@ -7,6 +7,7 @@ import { LoginPage } from '@/pages/LoginPage'
 import { SignupPage } from '@/pages/SignupPage'
 import { BoardPage } from '@/pages/BoardPage'
 import { TimelinePage } from '@/pages/TimelinePage'
+import { TaskDetailPage } from '@/pages/TaskDetailPage'
 import { useAuthStore } from '@/store/useAuthStore'
 
 const queryClient = new QueryClient({
@@ -36,6 +37,7 @@ export default function App() {
             <Route element={<DashboardLayout />}>
               <Route path="/" element={<Navigate to="/board" replace />} />
               <Route path="/board" element={<BoardPage />} />
+              <Route path="/board/task/:id" element={<TaskDetailPage />} />
               <Route path="/timeline" element={<TimelinePage />} />
             </Route>
           </Route>

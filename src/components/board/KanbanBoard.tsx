@@ -124,7 +124,7 @@ export function KanbanBoard({
             task={activeTask}
             isSelected={isSelected(activeTask.id)}
             onToggleSelect={() => undefined}
-            onClick={() => undefined}
+            onEdit={() => undefined}
             isDragOverlay
           />
         ) : null}
