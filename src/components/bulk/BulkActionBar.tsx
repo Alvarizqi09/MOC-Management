@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { CheckCircle2, Trash2, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { AlertDialog } from '@/components/ui/AlertDialog'
+import { useBulkDeleteTasks } from '@/hooks/useTasks'
 import {
-  useOptimisticBulkDelete,
   useOptimisticBulkUpdate,
 } from '@/hooks/useOptimisticTask'
 
@@ -19,7 +19,7 @@ export function BulkActionBar({
   onClear,
 }: BulkActionBarProps) {
   const bulkUpdate = useOptimisticBulkUpdate()
-  const bulkDelete = useOptimisticBulkDelete()
+  const bulkDelete = useBulkDeleteTasks()
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 

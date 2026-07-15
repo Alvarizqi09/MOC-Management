@@ -3,7 +3,7 @@ import { SearchBar } from '@/components/search/SearchBar'
 import { FilterTabs } from '@/components/search/FilterTabs'
 import { TimelineView } from '@/components/timeline/TimelineView'
 import { Button } from '@/components/ui/Button'
-import { useTasks } from '@/hooks/useTasks'
+import { useTasks, useEvents } from '@/hooks/useTasks'
 import { useFilteredTasks, useDebouncedValue } from '@/hooks/useFilteredTasks'
 import { useFilterStore } from '@/store/useFilterStore'
 import { useUIStore } from '@/store/useUIStore'
@@ -14,8 +14,14 @@ export function TimelinePage() {
   const debouncedSearch = useDebouncedValue(searchKeyword, 300)
   const setSelectedTask = useUIStore((s) => s.setSelectedTask)
 
-  const { data: tasks, isLoading, isError, error, refetch } = useTasks()
+  const { data: tasks, isLoading: tasksLoading, isError: tasksError, error: tasksErrorObj, refetch: refetchTasks } = useTasks()
+  const { data: events = [], isLoading: eventsLoading, refetch: refetchEvents } = useEvents()
   const filteredTasks = useFilteredTasks(tasks, filterStatus, debouncedSearch)
+
+  const isLoading = tasksLoading || eventsLoading
+  const isError = tasksError
+  const error = tasksErrorObj
+  const refetch = () => { refetchTasks(); refetchEvents() }
 
   return (
     <div>
@@ -38,7 +44,7 @@ export function TimelinePage() {
         </div>
       ) : isError ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-red-200 bg-red-50 py-16 text-center">
-          <p className="mb-2 text-sm font-medium text-red-700">Gagal memuat task</p>
+          <p className="mb-2 text-sm font-medium text-red-700">Gagal memuat data</p>
           <p className="mb-4 text-xs text-red-500">
             {(error as Error)?.message ?? 'Terjadi kesalahan'}
           </p>
@@ -57,7 +63,7 @@ export function TimelinePage() {
           </p>
         </div>
       ) : (
-        <TimelineView tasks={filteredTasks} onTaskClick={setSelectedTask} />
+        <TimelineView tasks={filteredTasks} events={events} onTaskClick={setSelectedTask} />
       )}
 
     </div>

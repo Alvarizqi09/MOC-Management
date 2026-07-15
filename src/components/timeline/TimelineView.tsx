@@ -6,43 +6,58 @@ import {
   isSameMonth
 } from 'date-fns'
 import { id as localeId } from 'date-fns/locale'
-import { CalendarDays } from 'lucide-react'
-import { PRIORITY_CONFIG, type Task } from '@/types/task.types'
+import { CalendarDays, Activity, Pencil, Plus, Trash2 } from 'lucide-react'
+import { type Task, type TaskEvent } from '@/types/task.types'
 import { CalendarView } from './CalendarView'
 
 interface TimelineViewProps {
   tasks: Task[]
+  events: TaskEvent[]
   onTaskClick: (task: Task) => void
 }
 
-export function TimelineView({ tasks, onTaskClick }: TimelineViewProps) {
+export function TimelineView({ tasks, events, onTaskClick }: TimelineViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDay, setSelectedDay] = useState<Date | null>(null)
 
-  const tasksWithDueDate = useMemo(
-    () =>
-      tasks
-        .filter((t) => t.dueDate)
-        .sort(
-          (a, b) =>
-            parseISO(a.dueDate!).getTime() - parseISO(b.dueDate!).getTime(),
-        ),
-    [tasks],
-  )
 
-  const filteredTasks = useMemo(() => {
-    return tasksWithDueDate.filter((task) => {
-      const date = parseISO(task.dueDate!)
-      
-      // If a specific day is selected, only show tasks for that day
-      if (selectedDay) {
-        return isSameDay(date, selectedDay)
-      }
-      
-      // Otherwise, show all tasks in the current month
-      return isSameMonth(date, currentDate)
-    })
-  }, [tasksWithDueDate, currentDate, selectedDay])
+
+  const filteredEvents = useMemo(() => {
+    return events
+      .filter((event) => {
+        const date = parseISO(event.createdAt)
+        if (selectedDay) {
+          return isSameDay(date, selectedDay)
+        }
+        return isSameMonth(date, currentDate)
+      })
+      .sort((a, b) => parseISO(b.createdAt).getTime() - parseISO(a.createdAt).getTime())
+  }, [events, currentDate, selectedDay])
+
+  const getEventIcon = (type: string) => {
+    switch (type) {
+      case 'created':
+        return <Plus className="h-4 w-4 text-blue-500" />
+      case 'edited':
+        return <Pencil className="h-4 w-4 text-slate-500" />
+      case 'status_changed':
+        return <Activity className="h-4 w-4 text-orange-500" />
+      case 'deleted':
+        return <Trash2 className="h-4 w-4 text-red-500" />
+      default:
+        return <Activity className="h-4 w-4 text-slate-500" />
+    }
+  }
+
+  const getEventColor = (type: string) => {
+    switch (type) {
+      case 'created': return 'border-blue-200 text-blue-600'
+      case 'edited': return 'border-slate-200 text-slate-600'
+      case 'status_changed': return 'border-orange-200 text-orange-600'
+      case 'deleted': return 'border-red-200 text-red-600'
+      default: return 'border-slate-200 text-slate-600'
+    }
+  }
 
   return (
     <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-5">
@@ -55,18 +70,18 @@ export function TimelineView({ tasks, onTaskClick }: TimelineViewProps) {
           }}
           selectedDay={selectedDay}
           onSelectDay={setSelectedDay}
-          tasks={tasksWithDueDate}
+          events={events}
         />
       </div>
       
       <div className="lg:col-span-3">
-        {filteredTasks.length === 0 ? (
+        {filteredEvents.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white py-16 text-center">
             <CalendarDays className="mb-3 h-10 w-10 text-slate-300" />
             <p className="text-sm font-medium text-slate-600">
               {selectedDay 
-                ? `Tidak ada task pada ${format(selectedDay, 'd MMM yyyy', { locale: localeId })}`
-                : 'Tidak ada task di bulan ini'}
+                ? `Tidak ada aktivitas pada ${format(selectedDay, 'd MMM yyyy', { locale: localeId })}`
+                : 'Tidak ada aktivitas di bulan ini'}
             </p>
             <p className="mt-1 text-xs text-slate-400">
               Pilih tanggal lain di kalender
@@ -74,62 +89,50 @@ export function TimelineView({ tasks, onTaskClick }: TimelineViewProps) {
           </div>
         ) : (
           <div className="rounded-xl border border-slate-200 bg-white p-4 md:p-6 shadow-sm">
-            <h3 className="mb-6 font-semibold text-slate-700">
-              {selectedDay 
-                ? `Task pada ${format(selectedDay, 'd MMMM yyyy', { locale: localeId })}`
-                : `Task Bulan ${format(currentDate, 'MMMM yyyy', { locale: localeId })}`}
-            </h3>
+            <div className="mb-6 flex items-center justify-between">
+              <h3 className="font-semibold text-slate-700">
+                {selectedDay 
+                  ? `Aktivitas pada ${format(selectedDay, 'd MMMM yyyy', { locale: localeId })}`
+                  : 'Semua Aktivitas Bulan Ini'}
+              </h3>
+              <span className="text-xs text-slate-400">
+                {filteredEvents.length} aktivitas
+              </span>
+            </div>
             
-            <div className="relative border-l-2 border-orange-200 pl-6 space-y-4">
-              {filteredTasks.map((task) => {
-                const dueDate = parseISO(task.dueDate!)
-                const priority = task.priority
-                  ? PRIORITY_CONFIG[task.priority]
-                  : null
+            <div className="relative space-y-6 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
+              {filteredEvents.map((event) => {
+                const eventDate = parseISO(event.createdAt)
 
                 return (
-                  <div
-                    key={task.id}
-                    className="relative"
-                  >
-                    <span className="absolute -left-[31px] top-3 h-3 w-3 rounded-full border-2 border-white bg-gradient-to-br from-red-500 to-orange-400 shadow-sm" />
-                    <button
-                      type="button"
-                      onClick={() => onTaskClick(task)}
-                      className="w-full rounded-lg border border-slate-200 bg-slate-50 p-4 text-left shadow-sm transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] hover:border-orange-200 hover:bg-white hover:shadow-md"
-                    >
-                      <div className="mb-1 flex flex-wrap items-center gap-2">
-                        <span className="font-mono text-[10px] text-slate-400">
-                          {task.ticketId}
+                  <div key={event.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-white bg-slate-50 text-slate-500 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                      {getEventIcon(event.type)}
+                    </div>
+                    
+                    <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-lg border border-slate-200 bg-white shadow-sm transition-all hover:border-orange-200 hover:shadow-md cursor-pointer" onClick={() => {
+                        if (event.type !== 'deleted') {
+                          const taskToOpen = tasks.find(t => t.id === event.taskId)
+                          if (taskToOpen) onTaskClick(taskToOpen)
+                        }
+                      }}>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className={`text-xs font-semibold ${getEventColor(event.type).split(' ')[1]}`}>
+                          {event.type === 'created' ? 'Task Created' : 
+                           event.type === 'edited' ? 'Edited' : 
+                           event.type === 'status_changed' ? 'Status Changed' : 'Deleted'}
                         </span>
-                        {priority ? (
-                          <span
-                            className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${priority.className}`}
-                          >
-                            {priority.label}
-                          </span>
-                        ) : null}
-                        <span
-                          className={`ml-auto text-xs font-medium ${
-                            task.status === 'done'
-                              ? 'text-emerald-600'
-                              : isSameDay(dueDate, new Date())
-                                ? 'text-orange-600'
-                                : 'text-slate-500'
-                          }`}
-                        >
-                          {format(dueDate, 'EEEE, d MMM', { locale: localeId })}
-                        </span>
+                        <time className="text-[10px] font-medium text-slate-400">
+                          {format(eventDate, 'MMM d - hh:mm a', { locale: localeId })}
+                        </time>
                       </div>
-                      <h4 className="text-sm font-medium text-slate-900">
-                        {task.title}
-                      </h4>
-                      {task.description ? (
-                        <p className="mt-1 line-clamp-2 text-xs text-slate-500">
-                          {task.description}
-                        </p>
-                      ) : null}
-                    </button>
+                      <div className="text-sm font-medium text-slate-900 mb-1">
+                        {event.details}
+                      </div>
+                      <div className="text-xs text-slate-500 line-clamp-1">
+                        {event.taskTitle} <span className="text-slate-400 font-mono text-[10px] ml-1">({event.ticketId})</span>
+                      </div>
+                    </div>
                   </div>
                 )
               })}

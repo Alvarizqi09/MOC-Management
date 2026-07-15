@@ -99,13 +99,12 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 - **Layout Modern** — Menggunakan Sidebar navigasi yang responsif
 - **Kanban board** 3 kolom (To Do / In Progress / Done) dengan drag-and-drop
 - **Detail Task** — Halaman khusus detail task dengan struktur tab (Info, Aktivitas, Komentar)
-- **Optimistic updates** — kartu langsung pindah kolom, rollback otomatis jika API gagal
+- **Optimistic updates & Async Loading** — kartu langsung pindah kolom saat drag-and-drop, sedangkan aksi destruktif (Delete) menggunakan async loading yang aman.
 - **CRUD task** — create, edit, delete, mark as done
 - **Global search** — cari by ticket ID (`TASKFLOW-1042` atau `1042`), judul, deskripsi
 - **Filter** — Semua / Selesai / Belum Selesai (client-side, debounced search)
 - **Bulk actions** — multi-select, tandai selesai / hapus sekaligus
-- **Timeline view** — visualisasi task berdasarkan due date (mingguan)
-
+- **Timeline & Activity Log** — visualisasi kalender interaktif dan riwayat aktivitas (Create, Edit, Move, Delete) secara kronologis
 ---
 
 ## Asumsi
@@ -120,7 +119,7 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 
 ## Tantangan & Keputusan Teknis
 
-1. **Optimistic update + drag-and-drop** — drag selesai langsung update cache React Query via `onMutate`, dengan rollback di `onError` jika mock API mensimulasikan kegagalan. `onSettled` selalu re-sync ke source of truth.
+1. **Optimistic Update vs Async Loading** — Drag-and-drop menggunakan Optimistic Update agar perpindahan kartu terasa instan tanpa loading. Sebaliknya, aksi hapus (Single/Bulk Delete) sengaja menggunakan standar Async (tunggu respons API) demi UX yang lebih jelas saat menjalankan operasi permanen, mencegah kebingungan jika proses bulk gagal sebagian.
 
 2. **Pemisahan concern** — komponen UI tidak import `storage/db.ts`; semua I/O data lewat `apiClient` → `mockAdapter` → `db.ts`, sehingga layer bisa diganti ke REST API sungguhan tanpa mengubah komponen.
 

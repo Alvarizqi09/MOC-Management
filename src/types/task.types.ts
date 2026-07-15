@@ -56,3 +56,16 @@ export const PRIORITY_CONFIG: Record<
   medium: { label: 'Medium', className: 'bg-amber-50 text-amber-700' },
   high: { label: 'High', className: 'bg-orange-100 text-orange-700' },
 }
+
+export type ActivityType = 'created' | 'edited' | 'status_changed' | 'deleted'
+
+export interface TaskEvent {
+  id: string
+  taskId: string
+  ticketId: string
+  taskTitle: string
+  type: ActivityType
+  details: string
+  createdAt: string
+}
+

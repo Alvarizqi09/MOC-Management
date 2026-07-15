@@ -8,6 +8,7 @@ import {
   deleteTask,
   generateTicketId,
   getAllTasks,
+  getAllEvents,
   getTaskById,
   seedInitialTasks,
   updateTask,
@@ -132,6 +133,10 @@ async function handleRequest(
 
   if (url === '/tasks' && method === 'get') {
     return createResponse(config, getAllTasks())
+  }
+
+  if (url === '/events' && method === 'get') {
+    return createResponse(config, getAllEvents())
   }
 
   if (url === '/tasks' && method === 'post') {

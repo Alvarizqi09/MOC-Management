@@ -5,6 +5,7 @@ import type {
   AuthResponse,
   CreateTaskInput,
   Task,
+  TaskEvent,
   UpdateTaskInput,
 } from '@/types/task.types'
 import type { LoginFormValues } from '@/lib/validators/task'
@@ -16,6 +17,18 @@ export function useTasks() {
     queryKey: TASKS_QUERY_KEY,
     queryFn: async () => {
       const { data } = await apiClient.get<Task[]>('/tasks')
+      return data
+    },
+  })
+}
+
+export const EVENTS_QUERY_KEY = ['events'] as const
+
+export function useEvents() {
+  return useQuery({
+    queryKey: EVENTS_QUERY_KEY,
+    queryFn: async () => {
+      const { data } = await apiClient.get<TaskEvent[]>('/events')
       return data
     },
   })
@@ -53,12 +66,39 @@ export function useCreateTask() {
       const { data } = await apiClient.post<Task>('/tasks', input)
       return data
     },
+    onMutate: async (input) => {
+      await queryClient.cancelQueries({ queryKey: TASKS_QUERY_KEY })
+      const previousTasks = queryClient.getQueryData<Task[]>(TASKS_QUERY_KEY)
+      
+      const optimisticTask: Task = {
+        id: `temp-${Date.now()}`,
+        ticketId: 'TASK-...',
+        title: input.title,
+        description: input.description,
+        status: input.status ?? 'todo',
+        priority: input.priority,
+        dueDate: input.dueDate,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }
+
+      queryClient.setQueryData<Task[]>(TASKS_QUERY_KEY, (old) => {
+        return old ? [...old, optimisticTask] : [optimisticTask]
+      })
+
+      return { previousTasks }
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
       toast.success('Task berhasil dibuat')
     },
-    onError: (error: Error) => {
+    onError: (error: Error, _variables, context: any) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(TASKS_QUERY_KEY, context.previousTasks)
+      }
       toast.error(error.message || 'Gagal membuat task')
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
     },
   })
 }
@@ -77,11 +117,31 @@ export function useUpdateTask() {
       const { data } = await apiClient.patch<Task>(`/tasks/${id}`, updates)
       return data
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
+    onMutate: async ({ id, updates }) => {
+      await queryClient.cancelQueries({ queryKey: TASKS_QUERY_KEY })
+      const previousTasks = queryClient.getQueryData<Task[]>(TASKS_QUERY_KEY)
+
+      queryClient.setQueryData<Task[]>(TASKS_QUERY_KEY, (old) =>
+        old?.map((task) =>
+          task.id === id
+            ? { ...task, ...updates, updatedAt: new Date().toISOString() }
+            : task,
+        ),
+      )
+
+      return { previousTasks }
     },
-    onError: (error: Error) => {
+    onSuccess: () => {
+      toast.success('Task berhasil diperbarui')
+    },
+    onError: (error: Error, _variables, context: any) => {
+      if (context?.previousTasks) {
+        queryClient.setQueryData(TASKS_QUERY_KEY, context.previousTasks)
+      }
       toast.error(error.message || 'Gagal memperbarui task')
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
     },
   })
 }

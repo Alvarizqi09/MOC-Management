@@ -13,14 +13,15 @@ import {
 } from "date-fns"
 import { id as localeId } from "date-fns/locale"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { type Task } from "@/types/task.types"
+import { type TaskEvent } from "@/types/task.types"
 
 const WEEKDAYS = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"]
 
-const PRIORITY_COLORS: Record<string, string> = {
-  high: "bg-orange-500",
-  medium: "bg-amber-400",
-  low: "bg-slate-400",
+const EVENT_COLORS: Record<string, string> = {
+  created: "bg-blue-500",
+  edited: "bg-slate-400",
+  status_changed: "bg-orange-500",
+  deleted: "bg-red-500",
 }
 
 interface CalendarViewProps {
@@ -28,7 +29,7 @@ interface CalendarViewProps {
   onDateChange: (date: Date) => void
   selectedDay: Date | null
   onSelectDay: (day: Date | null) => void
-  tasks: Task[]
+  events: TaskEvent[]
 }
 
 export function CalendarView({
@@ -36,24 +37,24 @@ export function CalendarView({
   onDateChange,
   selectedDay,
   onSelectDay,
-  tasks,
+  events,
 }: CalendarViewProps) {
   const monthStart = startOfMonth(currentDate)
   const monthEnd = endOfMonth(currentDate)
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd })
   const startDayOfWeek = getDay(monthStart)
 
-  const tasksByDay = useMemo(() => {
-    const map = new Map<string, Task[]>()
-    for (const task of tasks) {
-      if (!task.dueDate) continue
-      const date = parseISO(task.dueDate)
+  const eventsByDay = useMemo(() => {
+    const map = new Map<string, TaskEvent[]>()
+    for (const event of events) {
+      if (!event.createdAt) continue
+      const date = parseISO(event.createdAt)
       const key = format(date, "yyyy-MM-dd")
       if (!map.has(key)) map.set(key, [])
-      map.get(key)!.push(task)
+      map.get(key)!.push(event)
     }
     return map
-  }, [tasks])
+  }, [events])
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 md:p-5 shadow-sm">
@@ -94,11 +95,11 @@ export function CalendarView({
         ))}
         {days.map((day) => {
           const key = format(day, "yyyy-MM-dd")
-          const dayTasks = tasksByDay.get(key) ?? []
+          const dayEvents = eventsByDay.get(key) ?? []
           const isSelected = selectedDay && isSameDay(day, selectedDay)
           const today = isToday(day)
 
-          const uniquePriorities = [...new Set(dayTasks.map((t) => t.priority || 'low'))]
+          const uniqueEventTypes = [...new Set(dayEvents.map((e) => e.type))]
 
           return (
             <button
@@ -117,12 +118,12 @@ export function CalendarView({
               `}
             >
               <span>{format(day, "d")}</span>
-              {dayTasks.length > 0 && (
+              {dayEvents.length > 0 && (
                 <div className="flex gap-0.5">
-                  {uniquePriorities.slice(0, 3).map((priority) => (
+                  {uniqueEventTypes.slice(0, 3).map((type) => (
                     <span
-                      key={priority}
-                      className={`h-1.5 w-1.5 rounded-full ${PRIORITY_COLORS[priority]}`}
+                      key={type}
+                      className={`h-1.5 w-1.5 rounded-full ${EVENT_COLORS[type] || EVENT_COLORS.edited}`}
                     />
                   ))}
                 </div>
