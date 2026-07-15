@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'sonner'
+import { Eye, EyeOff } from 'lucide-react'
 import { loginSchema, type LoginFormValues } from '@/lib/validators/task'
 import { useLogin } from '@/hooks/useTasks'
 import { useAuthStore } from '@/store/useAuthStore'
@@ -14,6 +16,7 @@ export function LoginPage() {
   const navigate = useNavigate()
   const login = useAuthStore((s) => s.login)
   const loginMutation = useLogin()
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     register,
@@ -65,11 +68,20 @@ export function LoginPage() {
 
             <Input
               id="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               label="Password"
               placeholder="Masukkan password"
               autoComplete="current-password"
               error={errors.password?.message}
+              rightIcon={
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="text-slate-400 hover:text-slate-600 focus:outline-none"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              }
               {...register('password')}
             />
 
