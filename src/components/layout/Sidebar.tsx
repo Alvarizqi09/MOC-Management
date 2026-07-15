@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/Button'
 import logoImage from '@/assets/logo-dark.svg'
 import logoDarkImage from '@/assets/fallback.svg'
 
-export function Sidebar() {
+export function Sidebar({ variant = 'desktop' }: { variant?: 'desktop' | 'mobile' }) {
   const navigate = useNavigate()
   const { user, logout } = useAuthStore()
   const setIsCreateOpen = useUIStore((s) => s.setIsCreateOpen)
+  const setIsMobileMenuOpen = useUIStore((s) => s.setIsMobileMenuOpen)
 
   const handleLogout = () => {
     logout()
@@ -17,8 +18,12 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex h-screen w-64 flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm">
-      <div className="flex h-16 items-center border-b border-slate-100 px-6">
+    <aside
+      className={`flex h-full flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 ${
+        variant === 'mobile' ? 'w-full' : 'hidden md:flex w-64'
+      }`}
+    >
+      <div className="flex h-16 shrink-0 items-center border-b border-slate-100 px-6 dark:border-slate-800">
         <div className="flex items-center gap-3">
           <img src={logoImage} alt="TaskFlow" className="h-8 w-auto dark:hidden" />
           <img src={logoDarkImage} alt="TaskFlow" className="h-8 w-auto hidden dark:block" />
@@ -38,6 +43,7 @@ export function Sidebar() {
         <nav className="space-y-1">
           <NavLink
             to="/board"
+            onClick={() => setIsMobileMenuOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                 isActive
@@ -52,6 +58,7 @@ export function Sidebar() {
 
           <NavLink
             to="/timeline"
+            onClick={() => setIsMobileMenuOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                 isActive
@@ -66,6 +73,7 @@ export function Sidebar() {
 
           <NavLink
             to="/settings"
+            onClick={() => setIsMobileMenuOpen(false)}
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                 isActive
@@ -80,7 +88,7 @@ export function Sidebar() {
         </nav>
       </div>
 
-      <div className="border-t border-slate-100 dark:border-slate-800 p-4">
+      <div className="border-t border-slate-100 dark:border-slate-800 p-4 shrink-0">
         <div className="mb-4 flex items-center gap-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400">
             <User className="h-5 w-5" />

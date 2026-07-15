@@ -51,7 +51,7 @@ function getNextTicketNumber(): number {
 
 export function generateTicketId(): string {
   const num = getNextTicketNumber()
-  return `TASKFLOW-${num}`
+  return `MOCM-${num}`
 }
 
 export function getAllTasks(): Task[] {

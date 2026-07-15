@@ -40,6 +40,7 @@ Atau Anda juga dapat mendaftar (Sign Up) untuk membuat kredensial baru.
 
 - **React 19** + **TypeScript** (Vite)
 - **Tailwind CSS v4** — styling
+- **@base-ui/react/dialog** — headless UI untuk sistem Drawer (Sidebar Mobile)
 - **Zustand** (+ `persist`) — auth session, filter, UI preferences
 - **TanStack React Query** — server state, caching, optimistic updates
 - **Axios** — HTTP client dengan custom mock adapter
@@ -99,12 +100,12 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 ## Fitur
 
 - **Autentikasi** — Login, pendaftaran akun baru (Signup), dengan session persist
-- **Layout Modern** — Menggunakan Sidebar navigasi yang responsif
-- **Kanban board** 3 kolom (To Do / In Progress / Done) dengan drag-and-drop
+- **Mobile Responsive & Drawer Sidebar** — Dukungan penuh untuk *mobile/smartphone* menggunakan sistem laci (*Sheet Drawer*) berlapis dari ShadCN UI yang kokoh.
+- **Kanban board** 3 kolom (To Do / In Progress / Done) dengan drag-and-drop yang aman untuk horizontal scrolling di perangkat sentuh.
 - **Detail Task** — Halaman khusus detail task dengan struktur tab (Info, Aktivitas, Komentar)
 - **Optimistic updates & Async Loading** — kartu langsung pindah kolom saat drag-and-drop, sedangkan aksi destruktif (Delete) menggunakan async loading yang aman.
 - **CRUD task** — create, edit, delete, mark as done
-- **Global search** — cari by ticket ID (`TASKFLOW-1042` atau `1042`), judul, deskripsi
+- **Global search** — cari by ticket ID (`MOCM-1042` atau `1042`), judul, deskripsi
 - **Filter** — Semua / Selesai / Belum Selesai (client-side, debounced search)
 - **Bulk actions** — multi-select, tandai selesai / hapus sekaligus
 - **Timeline & Activity Log** — visualisasi kalender interaktif dan riwayat aktivitas (Create, Edit, Move, Delete) secara kronologis
@@ -141,6 +142,9 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 
 6. **Keputusan Desain & Estetika Visual** 
    Penggunaan palet warna utama bernuansa hangat (*orange-500* hingga *orange-600*) dipilih secara khusus untuk merepresentasikan dan selaras dengan identitas *brand* MOC (Master Online Community). Warna oranye ini diaplikasikan secara hati-hati sebagai aksen kuat pada elemen-elemen interaktif (*Call to Action*, tombol utama, garis aktif) di atas fondasi warna latar yang bersih dan netral (*slate/white*). Pendekatan ini membuat aplikasi terasa premium, tidak *generic*, dan secara visual langsung memancarkan identitas "MOC".
+
+7. **Sistem Sidebar Mobile (Drawer)**
+   Agar aplikasi terasa *native* layaknya aplikasi betulan di *smartphone*, saya mengganti panel samping biasa dengan komponen *Drawer/Sheet* bergaya *off-canvas* yang diadaptasi dari ekosistem ShadCN UI (ditenagai oleh `@base-ui/react/dialog`). Solusi ini memecahkan masalah *overlap layout* dan z-index kompleks yang sering terjadi pada Tailwind murni, sekaligus menyediakan *accessibility* bawaan, fokus trap, dan animasi *slide-in* yang sangat mulus.
 
 ---
 

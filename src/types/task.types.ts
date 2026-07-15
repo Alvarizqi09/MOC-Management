@@ -16,12 +16,12 @@ export interface Task {
 export interface AuthSession {
   isAuthenticated: boolean
   token: string
-  user: { username: string }
+  user: { username: string; avatarUrl?: string }
 }
 
 export interface AuthResponse {
   token: string
-  user: { username: string }
+  user: { username: string; avatarUrl?: string }
 }
 
 export type FilterStatus = 'all' | 'completed' | 'incomplete'

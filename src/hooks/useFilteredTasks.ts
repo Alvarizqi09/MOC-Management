@@ -22,7 +22,7 @@ export function useFilteredTasks(
       filtered = filtered.filter((t) => {
         const ticketMatch =
           t.ticketId.toLowerCase().includes(keyword) ||
-          t.ticketId.replace('TASKFLOW-', '').includes(keyword)
+          t.ticketId.replace('MOCM-', '').includes(keyword)
         const titleMatch = t.title.toLowerCase().includes(keyword)
         const descMatch = t.description?.toLowerCase().includes(keyword)
         return ticketMatch || titleMatch || !!descMatch

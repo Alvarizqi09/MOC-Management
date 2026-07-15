@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
+import { TopNav } from './TopNav'
 import { TaskFormModal } from '@/components/task/TaskFormModal'
 import { TaskEditModal } from '@/components/task/TaskEditModal'
 import { useUIStore } from '@/store/useUIStore'
@@ -12,11 +13,12 @@ export function DashboardLayout() {
   const setSelectedTask = useUIStore((s) => s.setSelectedTask)
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden">
-      <Sidebar />
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden w-full">
+      <Sidebar variant="desktop" />
       
-      <main className="flex-1 overflow-hidden flex flex-col">
-        <div className="mx-auto w-full max-w-7xl flex-1 overflow-hidden flex flex-col px-4 py-4 sm:px-6 lg:px-8">
+      <main className="flex-1 overflow-hidden flex flex-col relative w-full">
+        <TopNav />
+        <div className="mx-auto w-full max-w-7xl flex-1 overflow-auto flex flex-col px-4 py-4 sm:px-6 lg:px-8">
           <Outlet />
         </div>
       </main>
