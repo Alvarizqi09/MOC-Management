@@ -12,7 +12,7 @@ export function DashboardLayout() {
   const setSelectedTask = useUIStore((s) => s.setSelectedTask)
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
+    <div className="flex h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden">
       <Sidebar />
       
       <main className="flex-1 overflow-hidden flex flex-col">

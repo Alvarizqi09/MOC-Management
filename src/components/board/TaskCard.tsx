@@ -60,13 +60,13 @@ export function TaskCard({
         ref={isDragOverlay ? undefined : setNodeRef}
         {...listeners}
         {...attributes}
-        className={`group relative rounded-[12px] bg-white p-3 shadow-sm transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border border-slate-200 border-l-[3px] ${STATUS_COLORS[task.status]} ${
+        className={`group relative rounded-[12px] bg-white dark:bg-slate-800 p-3 shadow-sm transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] border border-slate-200 dark:border-slate-700 border-l-[3px] ${STATUS_COLORS[task.status]} ${
           isDragOverlay ? 'cursor-grabbing' : 'cursor-grab active:cursor-grabbing'
         } ${
           isDragging && !isDragOverlay
             ? 'opacity-40'
-            : 'hover:border-slate-300 hover:shadow-md'
-        } ${isSelected ? 'ring-2 ring-orange-100' : ''} ${isDragOverlay ? 'scale-[1.05] -rotate-2 shadow-xl ring-2 ring-slate-200' : ''} ${
+            : 'hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-md'
+        } ${isSelected ? 'ring-2 ring-orange-100 dark:ring-orange-900/30' : ''} ${isDragOverlay ? 'scale-[1.05] -rotate-2 shadow-xl dark:shadow-slate-900/50 ring-2 ring-slate-200 dark:ring-slate-700' : ''} ${
           isShake ? 'animate-shake border-red-300 ring-2 ring-red-100 z-10' : ''
         }`}
       >
@@ -87,7 +87,7 @@ export function TaskCard({
             onClick={() => navigate(`/board/task/${task.id}`)}
           >
             <div className="mb-1 flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[10px] font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+              <span className="font-mono text-[10px] font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-600">
                 {task.ticketId}
               </span>
               {priority ? (
@@ -98,7 +98,7 @@ export function TaskCard({
                 </span>
               ) : null}
             </div>
-            <h3 className={`text-sm font-medium pr-12 ${task.status === 'done' ? 'text-slate-400 line-through' : 'text-slate-900'}`}>
+            <h3 className={`text-sm font-medium pr-12 ${task.status === 'done' ? 'text-slate-400 dark:text-slate-500 line-through' : 'text-slate-900 dark:text-white'}`}>
               {task.title}
             </h3>
             {task.description ? (
@@ -108,7 +108,7 @@ export function TaskCard({
             ) : null}
             {dueDateLabel ? (
               <div
-                className={`mt-2 inline-flex items-center gap-1 text-xs ${isOverdue ? 'text-red-600' : 'text-slate-500'}`}
+                className={`mt-2 inline-flex items-center gap-1 text-xs ${isOverdue ? 'text-red-600 dark:text-red-400' : 'text-slate-500 dark:text-slate-400'}`}
               >
                 <Calendar className="h-3 w-3" />
                 {dueDateLabel}
@@ -126,7 +126,7 @@ export function TaskCard({
                 onEdit(task)
               }}
               onPointerDown={(e) => e.stopPropagation()}
-              className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+              className="rounded-full p-1.5 text-slate-400 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
             >
               <Pencil className="h-4 w-4" />
             </button>
@@ -136,7 +136,7 @@ export function TaskCard({
                 setIsDeleteDialogOpen(true)
               }}
               onPointerDown={(e) => e.stopPropagation()}
-              className="rounded-full p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+              className="rounded-full p-1.5 text-slate-400 dark:text-slate-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
             >
               <Trash2 className="h-4 w-4" />
             </button>

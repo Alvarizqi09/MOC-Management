@@ -18,21 +18,21 @@ export function TimelinePage() {
   return (
     <div className="flex h-full flex-col overflow-y-auto pb-8 pt-4">
       <div className="mb-8 shrink-0">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Timeline</h1>
-        <p className="text-sm text-slate-500">Lihat jadwal task dalam tampilan kalender</p>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Timeline</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Lihat jadwal task dalam tampilan kalender</p>
       </div>
 
 
 
       {isLoading ? (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-          <div className="lg:col-span-2 h-80 rounded-xl bg-slate-200 animate-pulse" />
-          <div className="lg:col-span-3 h-80 rounded-xl bg-slate-200 animate-pulse" />
+          <div className="lg:col-span-2 h-80 rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse" />
+          <div className="lg:col-span-3 h-80 rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse" />
         </div>
       ) : isError ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-red-200 bg-red-50 py-16 text-center">
-          <p className="mb-2 text-sm font-medium text-red-700">Gagal memuat data</p>
-          <p className="mb-4 text-xs text-red-500">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/20 py-16 text-center">
+          <p className="mb-2 text-sm font-medium text-red-700 dark:text-red-400">Gagal memuat data</p>
+          <p className="mb-4 text-xs text-red-500 dark:text-red-500/80">
             {(error as Error)?.message ?? 'Terjadi kesalahan'}
           </p>
           <Button variant="secondary" size="sm" onClick={() => refetch()}>

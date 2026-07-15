@@ -108,6 +108,8 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 - **Filter** — Semua / Selesai / Belum Selesai (client-side, debounced search)
 - **Bulk actions** — multi-select, tandai selesai / hapus sekaligus
 - **Timeline & Activity Log** — visualisasi kalender interaktif dan riwayat aktivitas (Create, Edit, Move, Delete) secara kronologis
+- **Dark & Light Mode** — Pengaturan tema tampilan (tersimpan otomatis) yang disempurnakan dengan *custom variant* Tailwind CSS v4.
+
 ---
 
 ## Asumsi

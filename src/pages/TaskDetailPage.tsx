@@ -52,8 +52,8 @@ export function TaskDetailPage() {
   if (isError || !task) {
     return (
       <div className="flex h-full flex-col items-center justify-center p-6 text-center">
-        <h2 className="text-xl font-semibold text-slate-900 mb-2">Task tidak ditemukan</h2>
-        <p className="text-sm text-slate-500 mb-6">Task yang Anda cari mungkin sudah dihapus atau tidak tersedia.</p>
+        <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">Task tidak ditemukan</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Task yang Anda cari mungkin sudah dihapus atau tidak tersedia.</p>
         <Button onClick={() => navigate('/board')}>Kembali ke Board</Button>
       </div>
     )
@@ -63,20 +63,20 @@ export function TaskDetailPage() {
   const status = STATUS_LABELS[task.status]
 
   return (
-    <div className="flex h-full flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <div className="flex h-full flex-col bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
       {/* Header */}
-      <div className="border-b border-slate-100 bg-white px-6 md:px-10 py-8 pb-0">
+      <div className="border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 md:px-10 py-8 pb-0">
         <div className="flex items-start gap-5 mb-8">
           <button
             onClick={() => navigate('/board')}
-            className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-50 text-slate-500 transition-all hover:bg-slate-100 hover:text-slate-900 hover:shadow-sm border border-slate-200/60"
+            className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 transition-all hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-sm border border-slate-200/60 dark:border-slate-700/60"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
           
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-3 mb-3">
-              <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded border border-slate-200 shadow-sm">
+              <span className="font-mono text-xs font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded border border-slate-200 dark:border-slate-700 shadow-sm">
                 {task.ticketId}
               </span>
               <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${status.bg} ${status.text}`}>
@@ -88,7 +88,7 @@ export function TaskDetailPage() {
                 </span>
               )}
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight break-words">
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white tracking-tight break-words">
               {task.title}
             </h1>
           </div>
@@ -96,14 +96,14 @@ export function TaskDetailPage() {
           <div className="flex items-center gap-2 shrink-0">
              <button
                 onClick={() => setIsEditModalOpen(true)}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
               >
                 <Pencil className="h-4 w-4" />
                 <span className="hidden sm:inline">Edit Task</span>
               </button>
               <button
                 onClick={() => setIsDeleteDialogOpen(true)}
-                className="flex items-center justify-center p-2 text-slate-400 bg-white border border-slate-200 rounded-lg shadow-sm hover:text-red-600 hover:bg-red-50 hover:border-red-100 transition-colors"
+                className="flex items-center justify-center p-2 text-slate-400 dark:text-slate-500 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-100 dark:hover:border-red-900/50 transition-colors"
                 aria-label="Hapus Task"
               >
                 <Trash2 className="h-4 w-4" />
@@ -135,7 +135,7 @@ export function TaskDetailPage() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto bg-slate-50/50 p-6 md:p-10">
+      <div className="flex-1 overflow-y-auto bg-slate-50/50 dark:bg-slate-900/50 p-6 md:p-10">
         {activeTab === 'info' && (
           <div className="w-full space-y-10">
             <section>
@@ -143,13 +143,13 @@ export function TaskDetailPage() {
                 <AlignLeft className="h-4 w-4 text-orange-500" />
                 Deskripsi
               </h3>
-              <div className="rounded-xl bg-white p-6 md:p-8 shadow-sm ring-1 ring-slate-900/5">
+              <div className="rounded-xl bg-white dark:bg-slate-800 p-6 md:p-8 shadow-sm ring-1 ring-slate-900/5 dark:ring-white/10">
                 {task.description ? (
-                  <p className="whitespace-pre-wrap text-[15px] text-slate-700 leading-relaxed">
+                  <p className="whitespace-pre-wrap text-[15px] text-slate-700 dark:text-slate-300 leading-relaxed">
                     {task.description}
                   </p>
                 ) : (
-                  <p className="text-sm italic text-slate-400">Belum ada deskripsi.</p>
+                  <p className="text-sm italic text-slate-400 dark:text-slate-500">Belum ada deskripsi.</p>
                 )}
               </div>
             </section>
@@ -160,24 +160,24 @@ export function TaskDetailPage() {
                 Jadwal & Waktu
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-                <div className="rounded-xl bg-white p-5 md:p-6 shadow-sm ring-1 ring-slate-900/5 flex items-start gap-4 transition-shadow hover:shadow-md">
-                   <div className="p-2.5 bg-slate-50 rounded-lg shrink-0 border border-slate-100">
-                     <Calendar className="h-5 w-5 text-slate-400" />
+                <div className="rounded-xl bg-white dark:bg-slate-800 p-5 md:p-6 shadow-sm ring-1 ring-slate-900/5 dark:ring-white/10 flex items-start gap-4 transition-shadow hover:shadow-md">
+                   <div className="p-2.5 bg-slate-50 dark:bg-slate-900/50 rounded-lg shrink-0 border border-slate-100 dark:border-slate-700">
+                     <Calendar className="h-5 w-5 text-slate-400 dark:text-slate-500" />
                    </div>
                    <div>
-                     <p className="text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Dibuat pada</p>
-                     <p className="text-sm font-semibold text-slate-900">
+                     <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mb-1 uppercase tracking-wider">Dibuat pada</p>
+                     <p className="text-sm font-semibold text-slate-900 dark:text-white">
                        {format(parseISO(task.createdAt), 'd MMMM yyyy, HH:mm', { locale: localeId })}
                      </p>
                    </div>
                 </div>
-                <div className="rounded-xl bg-white p-5 md:p-6 shadow-sm ring-1 ring-slate-900/5 flex items-start gap-4 transition-shadow hover:shadow-md">
-                   <div className="p-2.5 bg-orange-50 rounded-lg shrink-0 border border-orange-100">
-                     <Calendar className="h-5 w-5 text-orange-500" />
+                <div className="rounded-xl bg-white dark:bg-slate-800 p-5 md:p-6 shadow-sm ring-1 ring-slate-900/5 dark:ring-white/10 flex items-start gap-4 transition-shadow hover:shadow-md">
+                   <div className="p-2.5 bg-orange-50 dark:bg-orange-900/20 rounded-lg shrink-0 border border-orange-100 dark:border-orange-900/50">
+                     <Calendar className="h-5 w-5 text-orange-500 dark:text-orange-400" />
                    </div>
                    <div>
-                     <p className="text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Tenggat Waktu</p>
-                     <p className="text-sm font-semibold text-slate-900">
+                     <p className="text-xs font-semibold text-slate-400 dark:text-slate-500 mb-1 uppercase tracking-wider">Tenggat Waktu</p>
+                     <p className="text-sm font-semibold text-slate-900 dark:text-white">
                        {task.dueDate ? format(parseISO(task.dueDate), 'd MMMM yyyy', { locale: localeId }) : '-'}
                      </p>
                    </div>
@@ -188,18 +188,18 @@ export function TaskDetailPage() {
         )}
 
         {activeTab === 'activity' && (
-          <div className="flex flex-col items-center justify-center py-16 text-center w-full rounded-xl bg-white border border-slate-200 border-dashed">
-            <Activity className="h-8 w-8 text-slate-300 mb-3" />
-            <p className="text-sm font-medium text-slate-900">Belum ada aktivitas</p>
-            <p className="text-xs text-slate-500 mt-1">Jejak aktivitas task ini akan muncul di sini.</p>
+          <div className="flex flex-col items-center justify-center py-16 text-center w-full rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 border-dashed">
+            <Activity className="h-8 w-8 text-slate-300 dark:text-slate-600 mb-3" />
+            <p className="text-sm font-medium text-slate-900 dark:text-white">Belum ada aktivitas</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Jejak aktivitas task ini akan muncul di sini.</p>
           </div>
         )}
 
         {activeTab === 'comments' && (
-          <div className="flex flex-col items-center justify-center py-16 text-center w-full rounded-xl bg-white border border-slate-200 border-dashed">
-            <MessageSquare className="h-8 w-8 text-slate-300 mb-3" />
-            <p className="text-sm font-medium text-slate-900">Belum ada komentar</p>
-            <p className="text-xs text-slate-500 mt-1">Diskusikan task ini dengan tim Anda.</p>
+          <div className="flex flex-col items-center justify-center py-16 text-center w-full rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 border-dashed">
+            <MessageSquare className="h-8 w-8 text-slate-300 dark:text-slate-600 mb-3" />
+            <p className="text-sm font-medium text-slate-900 dark:text-white">Belum ada komentar</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Diskusikan task ini dengan tim Anda.</p>
           </div>
         )}
       </div>

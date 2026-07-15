@@ -44,11 +44,11 @@ export function BulkActionBar({
   return (
     <>
       <div className="animate-slide-up fixed bottom-6 left-1/2 z-50 -translate-x-1/2">
-        <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-lg">
-          <span className="text-sm font-medium text-slate-700">
+        <div className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 shadow-lg dark:shadow-slate-900/50">
+          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
             {selectedCount} task dipilih
           </span>
-          <div className="h-4 w-px bg-slate-200" />
+          <div className="h-4 w-px bg-slate-200 dark:bg-slate-800" />
           <Button
             variant="secondary"
             size="sm"
@@ -72,7 +72,7 @@ export function BulkActionBar({
           <button
             type="button"
             onClick={onClear}
-            className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+            className="rounded-lg p-1.5 text-slate-400 dark:text-slate-500 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-slate-300"
             aria-label="Batalkan seleksi"
           >
             <X className="h-4 w-4" />

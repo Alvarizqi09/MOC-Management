@@ -13,7 +13,7 @@ export function FilterTabs() {
 
   return (
     <div
-      className="flex shrink-0 rounded-lg border border-slate-200 bg-slate-50 p-0.5"
+      className="flex shrink-0 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 p-0.5"
       role="tablist"
       aria-label="Filter status task"
     >
@@ -26,8 +26,8 @@ export function FilterTabs() {
           onClick={() => setFilterStatus(value)}
           className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] sm:text-sm ${
             filterStatus === value
-              ? 'bg-white text-slate-900 shadow-sm'
-              : 'text-slate-500 hover:text-slate-700'
+              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
           }`}
         >
           {label}

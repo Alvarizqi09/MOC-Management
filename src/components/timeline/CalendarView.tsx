@@ -57,21 +57,21 @@ export function CalendarView({
   }, [events])
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 md:p-5 shadow-sm">
+    <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 md:p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <button
           type="button"
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 transition-colors"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           onClick={() => onDateChange(subMonths(currentDate, 1))}
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
-        <h3 className="font-semibold text-slate-700">
+        <h3 className="font-semibold text-slate-700 dark:text-slate-300">
           {format(currentDate, "MMMM yyyy", { locale: localeId })}
         </h3>
         <button
           type="button"
-          className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 transition-colors"
+          className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           onClick={() => onDateChange(addMonths(currentDate, 1))}
         >
           <ChevronRight className="h-4 w-4" />
@@ -82,7 +82,7 @@ export function CalendarView({
         {WEEKDAYS.map((d) => (
           <div
             key={d}
-            className="py-1 text-center text-xs font-medium text-slate-400"
+            className="py-1 text-center text-xs font-medium text-slate-400 dark:text-slate-500"
           >
             {d}
           </div>
@@ -110,10 +110,10 @@ export function CalendarView({
                 relative flex h-10 flex-col items-center justify-center gap-0.5 rounded-lg text-xs font-medium transition-all
                 ${
                   isSelected
-                    ? "bg-orange-100 text-orange-700 ring-1 ring-orange-400"
+                    ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 ring-1 ring-orange-400 dark:ring-orange-500/50"
                     : today
-                      ? "bg-orange-50 text-orange-600 ring-1 ring-orange-200"
-                      : "text-slate-600 hover:bg-slate-50"
+                      ? "bg-orange-50 dark:bg-orange-900/10 text-orange-600 dark:text-orange-500 ring-1 ring-orange-200 dark:ring-orange-900/50"
+                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
                 }
               `}
             >

@@ -36,10 +36,10 @@ export function BoardPage() {
     <div className="flex h-full flex-col overflow-hidden">
       <div className="mb-4 flex shrink-0 items-end justify-between gap-3 pt-4">
         <div>
-          <div className="font-syne text-2xl tracking-tight text-slate-900">
+          <div className="font-syne text-2xl tracking-tight text-slate-900 dark:text-white">
             Kanban Board
           </div>
-          <div className="text-sm text-slate-500">
+          <div className="text-sm text-slate-500 dark:text-slate-400">
             Track every opportunity with intent.
           </div>
         </div>
@@ -69,9 +69,9 @@ export function BoardPage() {
       {isLoading ? (
         <BoardSkeleton />
       ) : isError ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-red-200 bg-red-50 py-16 text-center">
-          <p className="mb-2 text-sm font-medium text-red-700">Gagal memuat task</p>
-          <p className="mb-4 text-xs text-red-500">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-900/20 py-16 text-center">
+          <p className="mb-2 text-sm font-medium text-red-700 dark:text-red-400">Gagal memuat task</p>
+          <p className="mb-4 text-xs text-red-500 dark:text-red-500/80">
             {(error as Error)?.message ?? 'Terjadi kesalahan'}
           </p>
           <Button variant="secondary" size="sm" onClick={() => refetch()}>
@@ -80,11 +80,11 @@ export function BoardPage() {
           </Button>
         </div>
       ) : filteredTasks.length === 0 && tasks && tasks.length > 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white py-16 text-center">
-          <p className="text-sm font-medium text-slate-600">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-16 text-center">
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
             Tidak ada task yang cocok dengan filter
           </p>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
             Coba ubah kata kunci pencarian atau filter status
           </p>
         </div>

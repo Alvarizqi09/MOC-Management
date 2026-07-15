@@ -60,7 +60,7 @@ export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Task" size="lg">
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <span className="rounded-md bg-slate-100 px-2 py-1 font-mono text-xs text-slate-600">
+        <span className="rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-1 font-mono text-xs text-slate-600 dark:text-slate-400">
           {task.ticketId}
         </span>
         {priority ? (
@@ -70,7 +70,7 @@ export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
             {priority.label}
           </span>
         ) : null}
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-slate-400 dark:text-slate-500">
           Dibuat{' '}
           {format(parseISO(task.createdAt), 'd MMM yyyy, HH:mm', {
             locale: localeId,
@@ -116,7 +116,7 @@ export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
           {...register('dueDate')}
         />
 
-        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-slate-100 pt-4">
+        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800 pt-4">
           <Button type="button" variant="ghost" onClick={onClose}>
             Tutup
           </Button>
