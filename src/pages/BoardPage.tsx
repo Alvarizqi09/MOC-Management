@@ -18,7 +18,7 @@ export function BoardPage() {
   const debouncedSearch = useDebouncedValue(searchKeyword, 300)
   const setSelectedTask = useUIStore((s) => s.setSelectedTask)
 
-  const { data: tasks, isLoading, isError, error, refetch, isFetching } = useTasks()
+  const { data: tasks, isLoading, isError, error, refetch } = useTasks()
   const filteredTasks = useFilteredTasks(tasks, filterStatus, debouncedSearch)
 
   const {

@@ -27,7 +27,7 @@ interface CalendarViewProps {
   currentDate: Date
   onDateChange: (date: Date) => void
   selectedDay: Date | null
-  onSelectDay: (day: Date) => void
+  onSelectDay: (day: Date | null) => void
   tasks: Task[]
 }
 
