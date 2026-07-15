@@ -91,7 +91,7 @@ export function useCreateTask() {
     onSuccess: () => {
       toast.success('Task berhasil dibuat')
     },
-    onError: (error: Error, _variables, context: any) => {
+    onError: (error: Error, _variables, context: { previousTasks?: Task[] } | undefined) => {
       if (context?.previousTasks) {
         queryClient.setQueryData(TASKS_QUERY_KEY, context.previousTasks)
       }
@@ -134,7 +134,7 @@ export function useUpdateTask() {
     onSuccess: () => {
       toast.success('Task berhasil diperbarui')
     },
-    onError: (error: Error, _variables, context: any) => {
+    onError: (error: Error, _variables, context: { previousTasks?: Task[] } | undefined) => {
       if (context?.previousTasks) {
         queryClient.setQueryData(TASKS_QUERY_KEY, context.previousTasks)
       }

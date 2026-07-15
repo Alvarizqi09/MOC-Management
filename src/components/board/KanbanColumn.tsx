@@ -13,7 +13,7 @@ interface KanbanColumnProps {
   failedDragId?: string | null
 }
 
-const COLUMN_STYLES: Record<TaskStatus, { icon: any; color: string }> = {
+const COLUMN_STYLES: Record<TaskStatus, { icon: React.ElementType; color: string }> = {
   todo: { icon: ListTodo, color: '#8B5CF6' }, // purple
   in_progress: { icon: Timer, color: '#3B82F6' }, // blue
   done: { icon: CheckCircle2, color: '#10B981' }, // green
