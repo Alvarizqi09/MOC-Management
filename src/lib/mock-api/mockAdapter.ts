@@ -9,6 +9,7 @@ import {
   generateTicketId,
   getAllTasks,
   getAllEvents,
+  clearAllEvents,
   getTaskById,
   seedInitialTasks,
   updateTask,
@@ -145,6 +146,18 @@ async function handleRequest(
 
   if (url === '/events' && method === 'get') {
     return createResponse(config, getAllEvents())
+  }
+
+  if (url === '/events' && method === 'delete') {
+    if (shouldSimulateMutationError()) {
+      return createErrorResponse(
+        config,
+        500,
+        'Gagal menghapus log aktivitas — simulasi error server',
+      )
+    }
+    clearAllEvents()
+    return createResponse(config, { success: true })
   }
 
   if (url === '/tasks' && method === 'post') {

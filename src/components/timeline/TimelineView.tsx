@@ -9,6 +9,9 @@ import { id as localeId } from 'date-fns/locale'
 import { CalendarDays, Activity, Pencil, Plus, Trash2 } from 'lucide-react'
 import { type Task, type TaskEvent } from '@/types/task.types'
 import { CalendarView } from './CalendarView'
+import { useClearEvents } from '@/hooks/useTasks'
+import { Button } from '@/components/ui/Button'
+import { AlertDialog } from '@/components/ui/AlertDialog'
 
 interface TimelineViewProps {
   tasks: Task[]
@@ -19,8 +22,8 @@ interface TimelineViewProps {
 export function TimelineView({ tasks, events, onTaskClick }: TimelineViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDay, setSelectedDay] = useState<Date | null>(null)
-
-
+  const [isAlertOpen, setIsAlertOpen] = useState(false)
+  const clearEvents = useClearEvents()
 
   const filteredEvents = useMemo(() => {
     return events
@@ -95,9 +98,23 @@ export function TimelineView({ tasks, events, onTaskClick }: TimelineViewProps) 
                   ? `Aktivitas pada ${format(selectedDay, 'd MMMM yyyy', { locale: localeId })}`
                   : 'Semua Aktivitas Bulan Ini'}
               </h3>
-              <span className="text-xs text-slate-400 dark:text-slate-500">
-                {filteredEvents.length} aktivitas
-              </span>
+              <div className="flex items-center gap-4">
+                <span className="text-xs text-slate-400 dark:text-slate-500">
+                  {filteredEvents.length} aktivitas
+                </span>
+                {filteredEvents.length > 0 && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setIsAlertOpen(true)}
+                    disabled={clearEvents.isPending}
+                    className="h-8 px-2 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-500 dark:hover:text-red-400 dark:hover:bg-red-950/50"
+                  >
+                    <Trash2 className="h-4 w-4 mr-1" />
+                    Bersihkan
+                  </Button>
+                )}
+              </div>
             </div>
             
             <div className="p-4 md:p-6 pt-0">
@@ -142,6 +159,20 @@ export function TimelineView({ tasks, events, onTaskClick }: TimelineViewProps) 
           </div>
         )}
       </div>
+      <AlertDialog
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+        onConfirm={() => {
+          clearEvents.mutate(undefined, {
+            onSuccess: () => setIsAlertOpen(false)
+          })
+        }}
+        title="Bersihkan Log Aktivitas?"
+        description="Apakah Anda yakin ingin menghapus semua riwayat aktivitas? Tindakan ini tidak dapat dibatalkan."
+        confirmText="Bersihkan"
+        cancelText="Batal"
+        isLoading={clearEvents.isPending}
+      />
     </div>
   )
 }

@@ -215,3 +215,20 @@ export function useBulkDeleteTasks() {
     },
   })
 }
+
+export function useClearEvents() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async () => {
+      await apiClient.delete('/events')
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY })
+      toast.success('Log aktivitas berhasil dibersihkan')
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Gagal membersihkan log aktivitas')
+    },
+  })
+}

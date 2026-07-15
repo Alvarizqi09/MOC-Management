@@ -62,6 +62,10 @@ export function getAllEvents(): TaskEvent[] {
   return readEvents()
 }
 
+export function clearAllEvents(): void {
+  writeEvents([])
+}
+
 export function getTaskById(id: string): Task | undefined {
   return readTasks().find((t) => t.id === id)
 }
