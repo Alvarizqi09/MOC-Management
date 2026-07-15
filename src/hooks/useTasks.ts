@@ -99,6 +99,7 @@ export function useCreateTask() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY })
     },
   })
 }
@@ -142,6 +143,7 @@ export function useUpdateTask() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY })
     },
   })
 }
@@ -156,6 +158,7 @@ export function useDeleteTask() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY })
       toast.success('Task berhasil dihapus')
     },
     onError: (error: Error) => {
@@ -185,6 +188,7 @@ export function useBulkUpdateTasks() {
     },
     onSuccess: (_, { ids }) => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY })
       toast.success(`${ids.length} task berhasil diperbarui`)
     },
     onError: (error: Error) => {
@@ -203,6 +207,7 @@ export function useBulkDeleteTasks() {
     },
     onSuccess: (ids) => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY })
       toast.success(`${ids.length} task berhasil dihapus`)
     },
     onError: (error: Error) => {

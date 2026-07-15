@@ -1,18 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { format, parseISO } from 'date-fns'
 import { id as localeId } from 'date-fns/locale'
-import { CheckCircle2, Trash2 } from 'lucide-react'
 import { taskSchema, parseTaskFormValues, type TaskFormValues } from '@/lib/validators/task'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
 import { Textarea, Select } from '@/components/ui/Textarea'
 import { Button } from '@/components/ui/Button'
-import { useDeleteTask } from '@/hooks/useTasks'
 import { useOptimisticTaskUpdate } from '@/hooks/useOptimisticTask'
 import { PRIORITY_CONFIG, type Task } from '@/types/task.types'
-import { AlertDialog } from '@/components/ui/AlertDialog'
 
 interface TaskEditModalProps {
   task: Task | null
@@ -22,9 +19,6 @@ interface TaskEditModalProps {
 
 export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
   const optimisticUpdate = useOptimisticTaskUpdate()
-  const deleteTask = useDeleteTask()
-
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
   const {
     register,
@@ -44,8 +38,6 @@ export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
         priority: task.priority ?? '',
         dueDate: task.dueDate ? task.dueDate.split('T')[0] : '',
       })
-    } else {
-      setIsDeleteDialogOpen(false)
     }
   }, [task, isOpen, reset])
 
@@ -63,21 +55,7 @@ export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
     )
   }
 
-  const handleMarkDone = () => {
-    optimisticUpdate.mutate(
-      { id: task.id, updates: { status: 'done' } },
-      { onSuccess: () => onClose() },
-    )
-  }
-
-  const confirmDelete = () => {
-    deleteTask.mutate(task.id, { onSuccess: () => {
-      setIsDeleteDialogOpen(false)
-      onClose()
-    }})
-  }
-
-  const isLoading = optimisticUpdate.isPending || deleteTask.isPending
+  const isLoading = optimisticUpdate.isPending
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Edit Task" size="lg">
@@ -138,60 +116,19 @@ export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
           {...register('dueDate')}
         />
 
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-4">
-          <div className="flex gap-2">
-            {task.status !== 'done' ? (
-              <Button
-                type="button"
-                variant="secondary"
-                size="sm"
-                onClick={handleMarkDone}
-                disabled={isLoading}
-              >
-                <CheckCircle2 className="h-4 w-4" />
-                Mark as Done
-              </Button>
-            ) : null}
-            <Button
-              type="button"
-              variant="danger"
-              size="sm"
-              onClick={() => setIsDeleteDialogOpen(true)}
-              isLoading={deleteTask.isPending}
-              disabled={isLoading}
-            >
-              <Trash2 className="h-4 w-4" />
-              Hapus
-            </Button>
-          </div>
-
-          <div className="flex gap-2">
-            <Button type="button" variant="ghost" onClick={onClose}>
-              Tutup
-            </Button>
-            <Button
-              type="submit"
-              isLoading={optimisticUpdate.isPending}
-              disabled={!isDirty || isLoading}
-            >
-              Simpan Perubahan
-            </Button>
-          </div>
+        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-slate-100 pt-4">
+          <Button type="button" variant="ghost" onClick={onClose}>
+            Tutup
+          </Button>
+          <Button
+            type="submit"
+            isLoading={optimisticUpdate.isPending}
+            disabled={!isDirty || isLoading}
+          >
+            Simpan Perubahan
+          </Button>
         </div>
       </form>
-
-      <AlertDialog
-        isOpen={isDeleteDialogOpen}
-        onClose={() => setIsDeleteDialogOpen(false)}
-        onConfirm={confirmDelete}
-        title="Hapus Task"
-        description={
-          <>
-            Apakah Anda yakin ingin menghapus task <strong>{task.title}</strong>? Aksi ini tidak dapat dibatalkan.
-          </>
-        }
-        isLoading={deleteTask.isPending}
-      />
     </Modal>
   )
 }

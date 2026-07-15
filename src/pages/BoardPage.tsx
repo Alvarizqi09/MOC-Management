@@ -33,8 +33,8 @@ export function BoardPage() {
   } = useBulkSelection(filteredTasks)
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="mb-4 flex shrink-0 items-end justify-between gap-3">
+    <div className="flex h-full flex-col overflow-hidden">
+      <div className="mb-4 flex shrink-0 items-end justify-between gap-3 pt-4">
         <div>
           <div className="font-syne text-2xl tracking-tight text-slate-900">
             Kanban Board
@@ -89,7 +89,7 @@ export function BoardPage() {
           </p>
         </div>
       ) : (
-        <div className="min-h-0 flex-1">
+        <div className="min-h-0 flex-1 flex flex-col">
           <KanbanBoard
             tasks={filteredTasks}
             isSelected={isSelected}

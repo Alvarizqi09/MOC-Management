@@ -61,7 +61,7 @@ export function TimelineView({ tasks, events, onTaskClick }: TimelineViewProps) 
 
   return (
     <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-5">
-      <div className="lg:col-span-2">
+      <div className="lg:col-span-2 lg:sticky lg:top-4">
         <CalendarView
           currentDate={currentDate}
           onDateChange={(d) => {
@@ -88,8 +88,8 @@ export function TimelineView({ tasks, events, onTaskClick }: TimelineViewProps) 
             </p>
           </div>
         ) : (
-          <div className="rounded-xl border border-slate-200 bg-white p-4 md:p-6 shadow-sm">
-            <div className="mb-6 flex items-center justify-between">
+          <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+            <div className="mb-6 flex items-center justify-between p-4 md:p-6 pb-2">
               <h3 className="font-semibold text-slate-700">
                 {selectedDay 
                   ? `Aktivitas pada ${format(selectedDay, 'd MMMM yyyy', { locale: localeId })}`
@@ -100,7 +100,8 @@ export function TimelineView({ tasks, events, onTaskClick }: TimelineViewProps) 
               </span>
             </div>
             
-            <div className="relative space-y-6 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
+            <div className="p-4 md:p-6 pt-0">
+              <div className="relative space-y-6 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
               {filteredEvents.map((event) => {
                 const eventDate = parseISO(event.createdAt)
 
@@ -136,6 +137,7 @@ export function TimelineView({ tasks, events, onTaskClick }: TimelineViewProps) 
                   </div>
                 )
               })}
+              </div>
             </div>
           </div>
         )}

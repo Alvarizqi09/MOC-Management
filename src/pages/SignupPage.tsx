@@ -8,6 +8,7 @@ import { generateMockToken } from '@/lib/mock-api/auth.mock'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import logoImage from '@/assets/logo.png'
+import { apiClient } from '@/lib/axios-instance'
 
 export function SignupPage() {
   const navigate = useNavigate()
@@ -23,14 +24,19 @@ export function SignupPage() {
   })
 
   const onSubmit = async (values: SignupFormValues) => {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 800))
-    
-    // Simulate successful signup and login
-    const token = generateMockToken()
-    login(token, values.username)
-    toast.success(`Akun berhasil dibuat! Selamat datang, ${values.username}.`)
-    navigate('/board', { replace: true })
+    try {
+      const response = await apiClient.post('/auth/signup', {
+        username: values.username,
+        password: values.password,
+      })
+      const { token } = response.data
+      
+      login(token, values.username)
+      toast.success(`Akun berhasil dibuat! Selamat datang, ${values.username}.`)
+      navigate('/board', { replace: true })
+    } catch (error) {
+      toast.error('Gagal membuat akun, silakan coba lagi.')
+    }
   }
 
   return (

@@ -1,22 +1,14 @@
 import { RefreshCw } from 'lucide-react'
-import { SearchBar } from '@/components/search/SearchBar'
-import { FilterTabs } from '@/components/search/FilterTabs'
 import { TimelineView } from '@/components/timeline/TimelineView'
 import { Button } from '@/components/ui/Button'
 import { useTasks, useEvents } from '@/hooks/useTasks'
-import { useFilteredTasks, useDebouncedValue } from '@/hooks/useFilteredTasks'
-import { useFilterStore } from '@/store/useFilterStore'
 import { useUIStore } from '@/store/useUIStore'
 
 export function TimelinePage() {
-  const filterStatus = useFilterStore((s) => s.filterStatus)
-  const searchKeyword = useFilterStore((s) => s.searchKeyword)
-  const debouncedSearch = useDebouncedValue(searchKeyword, 300)
   const setSelectedTask = useUIStore((s) => s.setSelectedTask)
 
   const { data: tasks, isLoading: tasksLoading, isError: tasksError, error: tasksErrorObj, refetch: refetchTasks } = useTasks()
   const { data: events = [], isLoading: eventsLoading, refetch: refetchEvents } = useEvents()
-  const filteredTasks = useFilteredTasks(tasks, filterStatus, debouncedSearch)
 
   const isLoading = tasksLoading || eventsLoading
   const isError = tasksError
@@ -24,18 +16,13 @@ export function TimelinePage() {
   const refetch = () => { refetchTasks(); refetchEvents() }
 
   return (
-    <div>
-      <div className="mb-8">
+    <div className="flex h-full flex-col overflow-y-auto pb-8 pt-4">
+      <div className="mb-8 shrink-0">
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">Timeline</h1>
         <p className="text-sm text-slate-500">Lihat jadwal task dalam tampilan kalender</p>
       </div>
 
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-          <SearchBar />
-          <FilterTabs />
-        </div>
-      </div>
+
 
       {isLoading ? (
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
@@ -53,17 +40,8 @@ export function TimelinePage() {
             Coba Lagi
           </Button>
         </div>
-      ) : filteredTasks.length === 0 && tasks && tasks.length > 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white py-16 text-center">
-          <p className="text-sm font-medium text-slate-600">
-            Tidak ada task yang cocok dengan filter
-          </p>
-          <p className="mt-1 text-xs text-slate-400">
-            Coba ubah kata kunci pencarian atau filter status
-          </p>
-        </div>
       ) : (
-        <TimelineView tasks={filteredTasks} events={events} onTaskClick={setSelectedTask} />
+        <TimelineView tasks={tasks || []} events={events} onTaskClick={setSelectedTask} />
       )}
 
     </div>

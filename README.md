@@ -4,6 +4,9 @@ Aplikasi manajemen task berbasis Kanban (gaya Trello/Jira) untuk **Master Online
 
 Berjalan **100% offline** dengan simulasi API server: latensi jaringan, autentikasi token, dan error acak pada mutasi.
 
+> **⚠️ PERHATIAN UNTUK PENILAI (TESTER):**  
+> Aplikasi ini sengaja disimulasikan memiliki **10% kemungkinan *error* (gagal)** setiap kali Anda membuat, mengedit, atau menghapus task (Mutasi). Hal ini dibuat secara sengaja di dalam *Mock API Layer* untuk mendemonstrasikan fitur *Error Handling*, *Toast Notification*, dan ***Rollback* otomatis** pada *Optimistic Update*. Jadi, jika sewaktu-waktu Anda mendapat notifikasi merah "Gagal menyimpan/memperbarui task", **itu bukanlah sebuah *bug***, melainkan fitur simulasi server. Silakan coba klik sekali lagi.
+
 ## Menjalankan Aplikasi
 
 ```bash
@@ -119,16 +122,34 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 
 ## Tantangan & Keputusan Teknis
 
-1. **Optimistic Update vs Async Loading** — Drag-and-drop menggunakan Optimistic Update agar perpindahan kartu terasa instan tanpa loading. Sebaliknya, aksi hapus (Single/Bulk Delete) sengaja menggunakan standar Async (tunggu respons API) demi UX yang lebih jelas saat menjalankan operasi permanen, mencegah kebingungan jika proses bulk gagal sebagian.
+1. **Optimistic Update vs Async Loading** 
+   Drag-and-drop dan perubahan status task menggunakan *Optimistic Update* agar transisi terasa instan tanpa jeda loading. Sebaliknya, aksi destruktif seperti hapus (Single/Bulk Delete) sengaja menggunakan standar *Async* (menunggu respons API) demi UX yang lebih aman dan jelas, mencegah kebingungan pengguna apabila proses penghapusan massal gagal di tengah jalan.
 
-2. **Pemisahan concern** — komponen UI tidak import `storage/db.ts`; semua I/O data lewat `apiClient` → `mockAdapter` → `db.ts`, sehingga layer bisa diganti ke REST API sungguhan tanpa mengubah komponen.
+2. **Pemisahan Concern (Architectural Abstraction)** 
+   Tantangan terbesar sekaligus poin krusial adalah memastikan UI layer sama sekali tidak menyentuh `localStorage`. Seluruh pertukaran data dilewatkan melalui `apiClient` (Axios) -> `mockAdapter` -> `db.ts`. Keputusan ini diambil agar codebase frontend *production-ready*; jika backend REST API yang asli sudah siap, nantinya kita hanya perlu membuang `mockAdapter` tanpa mengubah satu baris pun kode di komponen UI.
 
-3. **Filter vs Kanban** — filter status (`completed`/`incomplete`) kompatibel dengan kolom Kanban karena `done` = Selesai, `todo` + `in_progress` = Belum Selesai — satu model status, dua cara visualisasi.
+3. **Integrasi Kanban dengan Filter Status** 
+   Adanya mapping untuk status `done` = Selesai, dan `todo` + `in_progress` = Belum Selesai. Hal ini membuat aplikasi menggunakan satu *source of truth* status tanpa mengorbankan fungsionalitas drag-and-drop.
 
-4. **Bulk select scope** — "Pilih semua" hanya memilih task yang **sedang tampil** sesuai filter aktif, bukan seluruh database.
+4. **Desain Halaman Detail Task** 
+   Untuk memberikan pengalaman yang lebih baik dari sekadar *modal* popup, saya membangun halaman Detail Task khusus (mirip gaya Jobtracker/Trello) di mana pengguna dapat melihat info lengkap, mengedit, hingga menghapus task. Aksi edit dan hapus dari halaman ini tetap terhubung secara asinkron (optimistic & async) dengan arsitektur React Query di baliknya.
+
+5. **Scope Fitur "Pilih Semua" (Bulk Action)** 
+   Tombol "Pilih Semua" sengaja dibatasi hanya untuk memilih task yang **sedang tampil** sesuai filter dan pencarian aktif, bukan seluruh entri di database, demi menjaga konsistensi dengan intensi pencarian pengguna.
+
+6. **Keputusan Desain & Estetika Visual** 
+   Penggunaan palet warna utama bernuansa hangat (*orange-500* hingga *orange-600*) dipilih secara khusus untuk merepresentasikan dan selaras dengan identitas *brand* MOC (Master Online Community). Warna oranye ini diaplikasikan secara hati-hati sebagai aksen kuat pada elemen-elemen interaktif (*Call to Action*, tombol utama, garis aktif) di atas fondasi warna latar yang bersih dan netral (*slate/white*). Pendekatan ini membuat aplikasi terasa premium, tidak *generic*, dan secara visual langsung memancarkan identitas "MOC".
 
 ---
 
 ## Lisensi
 
-Project ini dibuat untuk keperluan technical test MOC Group.
+Project ini dibuat secara khusus untuk keperluan *Technical Test* MOC Group.
+
+---
+
+## Author
+
+**Alvarizqi**
+- ✉️ Email: [alvarizki80@gmail.com](mailto:alvarizki80@gmail.com)
+- 🌐 Website: [www.alvarizqi.com](https://www.alvarizqi.com)

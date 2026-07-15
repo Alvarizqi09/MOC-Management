@@ -122,6 +122,14 @@ async function handleRequest(
     })
   }
 
+  if (url === '/auth/signup' && method === 'post') {
+    const body = parseRequestBody<{ username: string }>(config.data)
+    return createResponse(config, {
+      token: generateMockToken(),
+      user: { username: body.username },
+    })
+  }
+
   if (url === '/auth/validate' && method === 'get') {
     requireAuth(config)
     return createResponse(config, { valid: true })

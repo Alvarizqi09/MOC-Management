@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { apiClient } from '@/lib/axios-instance'
-import { TASKS_QUERY_KEY } from '@/hooks/useTasks'
+import { TASKS_QUERY_KEY, EVENTS_QUERY_KEY } from '@/hooks/useTasks'
 import type { Task, UpdateTaskInput } from '@/types/task.types'
 
 interface OptimisticContext {
@@ -45,6 +45,7 @@ export function useOptimisticTaskUpdate() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY })
     },
   })
 }
@@ -92,6 +93,7 @@ export function useOptimisticBulkUpdate() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY })
     },
   })
 }
@@ -124,6 +126,7 @@ export function useOptimisticBulkDelete() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
+      queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY })
     },
   })
 }

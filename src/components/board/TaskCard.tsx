@@ -87,7 +87,7 @@ export function TaskCard({
             onClick={() => navigate(`/board/task/${task.id}`)}
           >
             <div className="mb-1 flex flex-wrap items-center gap-2">
-              <span className="font-mono text-[10px] font-medium text-slate-400">
+              <span className="font-mono text-[10px] font-bold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
                 {task.ticketId}
               </span>
               {priority ? (

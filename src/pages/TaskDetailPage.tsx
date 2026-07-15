@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import { id as localeId } from 'date-fns/locale'
-import { ArrowLeft, Calendar, Activity, AlignLeft, MessageSquare } from 'lucide-react'
-import { useTask } from '@/hooks/useTasks'
+import { ArrowLeft, Calendar, Activity, AlignLeft, MessageSquare, Pencil, Trash2 } from 'lucide-react'
+import { useTask, useDeleteTask } from '@/hooks/useTasks'
 import { PRIORITY_CONFIG } from '@/types/task.types'
 import { Button } from '@/components/ui/Button'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { TaskEditModal } from '@/components/task/TaskEditModal'
+import { AlertDialog } from '@/components/ui/AlertDialog'
 
 const TABS = [
   { id: 'info', label: 'Info Task', icon: AlignLeft },
@@ -26,8 +28,11 @@ export function TaskDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { data: task, isLoading, isError } = useTask(id)
+  const deleteTask = useDeleteTask()
   
   const [activeTab, setActiveTab] = useState<TabId>('info')
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
   if (isLoading) {
     return (
@@ -60,32 +65,49 @@ export function TaskDetailPage() {
   return (
     <div className="flex h-full flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
       {/* Header */}
-      <div className="border-b border-slate-100 px-6 py-6 pb-0">
-        <div className="flex items-start gap-4 mb-6">
+      <div className="border-b border-slate-100 bg-white px-6 md:px-10 py-8 pb-0">
+        <div className="flex items-start gap-5 mb-8">
           <button
             onClick={() => navigate('/board')}
-            className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-50 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-900"
+            className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-50 text-slate-500 transition-all hover:bg-slate-100 hover:text-slate-900 hover:shadow-sm border border-slate-200/60"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-5 w-5" />
           </button>
           
           <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-3 mb-2">
-              <span className="font-mono text-sm font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+            <div className="flex flex-wrap items-center gap-3 mb-3">
+              <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded border border-slate-200 shadow-sm">
                 {task.ticketId}
               </span>
-              <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.text}`}>
+              <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${status.bg} ${status.text}`}>
                 {status.label}
               </span>
               {priority && (
-                <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${priority.className}`}>
+                <span className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${priority.className}`}>
                   {priority.label}
                 </span>
               )}
             </div>
-            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight break-words">
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight break-words">
               {task.title}
             </h1>
+          </div>
+          
+          <div className="flex items-center gap-2 shrink-0">
+             <button
+                onClick={() => setIsEditModalOpen(true)}
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg shadow-sm hover:bg-slate-50 transition-colors"
+              >
+                <Pencil className="h-4 w-4" />
+                <span className="hidden sm:inline">Edit Task</span>
+              </button>
+              <button
+                onClick={() => setIsDeleteDialogOpen(true)}
+                className="flex items-center justify-center p-2 text-slate-400 bg-white border border-slate-200 rounded-lg shadow-sm hover:text-red-600 hover:bg-red-50 hover:border-red-100 transition-colors"
+                aria-label="Hapus Task"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
           </div>
         </div>
 
@@ -113,48 +135,60 @@ export function TaskDetailPage() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto bg-slate-50 p-6">
+      <div className="flex-1 overflow-y-auto bg-slate-50/50 p-6 md:p-10">
         {activeTab === 'info' && (
-          <div className="max-w-3xl space-y-6">
-            <div className="rounded-xl bg-white p-6 shadow-sm border border-slate-200">
-              <h3 className="text-sm font-medium text-slate-900 mb-4 flex items-center gap-2">
-                <AlignLeft className="h-4 w-4 text-slate-400" />
+          <div className="w-full space-y-10">
+            <section>
+              <h3 className="text-xs font-bold text-slate-400 mb-3 flex items-center gap-2 uppercase tracking-wider">
+                <AlignLeft className="h-4 w-4 text-orange-500" />
                 Deskripsi
               </h3>
-              {task.description ? (
-                <p className="whitespace-pre-wrap text-sm text-slate-600 leading-relaxed">
-                  {task.description}
-                </p>
-              ) : (
-                <p className="text-sm italic text-slate-400">Belum ada deskripsi.</p>
-              )}
-            </div>
+              <div className="rounded-xl bg-white p-6 md:p-8 shadow-sm ring-1 ring-slate-900/5">
+                {task.description ? (
+                  <p className="whitespace-pre-wrap text-[15px] text-slate-700 leading-relaxed">
+                    {task.description}
+                  </p>
+                ) : (
+                  <p className="text-sm italic text-slate-400">Belum ada deskripsi.</p>
+                )}
+              </div>
+            </section>
 
-            <div className="rounded-xl bg-white p-6 shadow-sm border border-slate-200">
-              <h3 className="text-sm font-medium text-slate-900 mb-4 flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-slate-400" />
+            <section>
+              <h3 className="text-xs font-bold text-slate-400 mb-3 flex items-center gap-2 uppercase tracking-wider">
+                <Calendar className="h-4 w-4 text-blue-500" />
                 Jadwal & Waktu
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-xs font-medium text-slate-400 mb-1">Dibuat pada</p>
-                  <p className="text-sm text-slate-900">
-                    {format(parseISO(task.createdAt), 'd MMMM yyyy, HH:mm', { locale: localeId })}
-                  </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+                <div className="rounded-xl bg-white p-5 md:p-6 shadow-sm ring-1 ring-slate-900/5 flex items-start gap-4 transition-shadow hover:shadow-md">
+                   <div className="p-2.5 bg-slate-50 rounded-lg shrink-0 border border-slate-100">
+                     <Calendar className="h-5 w-5 text-slate-400" />
+                   </div>
+                   <div>
+                     <p className="text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Dibuat pada</p>
+                     <p className="text-sm font-semibold text-slate-900">
+                       {format(parseISO(task.createdAt), 'd MMMM yyyy, HH:mm', { locale: localeId })}
+                     </p>
+                   </div>
                 </div>
-                <div>
-                  <p className="text-xs font-medium text-slate-400 mb-1">Tenggat Waktu (Due Date)</p>
-                  <p className="text-sm text-slate-900">
-                    {task.dueDate ? format(parseISO(task.dueDate), 'd MMMM yyyy', { locale: localeId }) : '-'}
-                  </p>
+                <div className="rounded-xl bg-white p-5 md:p-6 shadow-sm ring-1 ring-slate-900/5 flex items-start gap-4 transition-shadow hover:shadow-md">
+                   <div className="p-2.5 bg-orange-50 rounded-lg shrink-0 border border-orange-100">
+                     <Calendar className="h-5 w-5 text-orange-500" />
+                   </div>
+                   <div>
+                     <p className="text-xs font-semibold text-slate-400 mb-1 uppercase tracking-wider">Tenggat Waktu</p>
+                     <p className="text-sm font-semibold text-slate-900">
+                       {task.dueDate ? format(parseISO(task.dueDate), 'd MMMM yyyy', { locale: localeId }) : '-'}
+                     </p>
+                   </div>
                 </div>
               </div>
-            </div>
+            </section>
           </div>
         )}
 
         {activeTab === 'activity' && (
-          <div className="flex flex-col items-center justify-center py-16 text-center max-w-3xl rounded-xl bg-white border border-slate-200 border-dashed">
+          <div className="flex flex-col items-center justify-center py-16 text-center w-full rounded-xl bg-white border border-slate-200 border-dashed">
             <Activity className="h-8 w-8 text-slate-300 mb-3" />
             <p className="text-sm font-medium text-slate-900">Belum ada aktivitas</p>
             <p className="text-xs text-slate-500 mt-1">Jejak aktivitas task ini akan muncul di sini.</p>
@@ -162,13 +196,42 @@ export function TaskDetailPage() {
         )}
 
         {activeTab === 'comments' && (
-          <div className="flex flex-col items-center justify-center py-16 text-center max-w-3xl rounded-xl bg-white border border-slate-200 border-dashed">
+          <div className="flex flex-col items-center justify-center py-16 text-center w-full rounded-xl bg-white border border-slate-200 border-dashed">
             <MessageSquare className="h-8 w-8 text-slate-300 mb-3" />
             <p className="text-sm font-medium text-slate-900">Belum ada komentar</p>
             <p className="text-xs text-slate-500 mt-1">Diskusikan task ini dengan tim Anda.</p>
           </div>
         )}
       </div>
+      
+      {task && (
+        <>
+          <TaskEditModal
+            task={task}
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+          />
+          <AlertDialog
+            isOpen={isDeleteDialogOpen}
+            onClose={() => setIsDeleteDialogOpen(false)}
+            onConfirm={() => {
+              deleteTask.mutate(task.id, {
+                onSuccess: () => {
+                  setIsDeleteDialogOpen(false)
+                  navigate('/board')
+                }
+              })
+            }}
+            title="Hapus Task"
+            description={
+              <>
+                Apakah Anda yakin ingin menghapus task <strong>{task.title}</strong>? Aksi ini tidak dapat dibatalkan.
+              </>
+            }
+            isLoading={deleteTask.isPending}
+          />
+        </>
+      )}
     </div>
   )
 }

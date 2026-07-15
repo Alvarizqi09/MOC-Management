@@ -35,7 +35,7 @@ export function KanbanColumn({
 
   return (
     <div
-      className={`flex min-h-[420px] w-full shrink-0 flex-col rounded-[20px] bg-white border border-slate-200 shadow-sm transition-all duration-200 sm:w-[350px] ${
+      className={`flex h-full min-h-[420px] w-full shrink-0 flex-col rounded-[20px] bg-white border border-slate-200 shadow-sm transition-all duration-200 sm:w-[350px] ${
         isOver
           ? 'bg-orange-50/50 ring-2 ring-orange-500/20'
           : ''
@@ -60,7 +60,7 @@ export function KanbanColumn({
 
       <div
         ref={setNodeRef}
-        className="flex flex-1 flex-col gap-3 p-3 pt-0"
+        className="flex flex-1 flex-col gap-3 p-3 pt-0 overflow-y-auto"
         data-status={status}
       >
         {tasks.length === 0 ? (
