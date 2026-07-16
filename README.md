@@ -3,7 +3,7 @@
 Aplikasi manajemen task berbasis Kanban (gaya Trello/Jira) untuk **Master Online Community (MOC)** — technical test Frontend Developer.
 
 > **⚠️ PERHATIAN UNTUK PENILAI (TESTER):**  
-> Aplikasi ini sengaja disimulasikan memiliki **10% kemungkinan *error* (gagal)** setiap kali Anda membuat, mengedit, atau menghapus task (Mutasi). Hal ini dibuat secara sengaja di dalam *Mock API Layer* untuk mendemonstrasikan fitur *Error Handling*, *Toast Notification*, dan ***Rollback* otomatis** pada *Optimistic Update*. Jadi, jika sewaktu-waktu Anda mendapat notifikasi merah "Gagal menyimpan/memperbarui task", **itu bukanlah sebuah *bug***, melainkan fitur simulasi server. Silakan coba klik sekali lagi.
+> Aplikasi ini sengaja disimulasikan memiliki **10% kemungkinan *error* (gagal)** setiap kali ada action untuk membuat, mengedit, atau menghapus task (Mutasi). Hal ini dibuat secara sengaja di dalam *Mock API Layer* untuk mendemonstrasikan fitur *Error Handling*, *Toast Notification*, dan ***Rollback* otomatis** pada *Optimistic Update*. Jadi, jika sewaktu-waktu muncul notifikasi merah "Gagal menyimpan/memperbarui task", **itu bukanlah sebuah *bug***, melainkan fitur simulasi server. Silakan coba klik sekali lagi.
 
 ## Menjalankan Aplikasi
 
@@ -21,7 +21,7 @@ Buka [http://localhost:5173](http://localhost:5173)
 | Username | `admin`    |
 | Password | `admin123` |
 
-Atau Anda juga dapat mendaftar (Sign Up) untuk membuat kredensial baru.
+terdapat juga fitur (Sign Up) untuk membuat kredensial baru.
 
 ### Scripts
 
