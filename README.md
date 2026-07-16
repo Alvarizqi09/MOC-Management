@@ -59,7 +59,7 @@ src/
 ├── components/     # UI Layer — render & interaksi, tidak tahu localStorage
 │   ├── board/      # KanbanBoard, KanbanColumn, TaskCard
 │   ├── task/       # TaskFormModal, TaskEditModal
-│   ├── search/     # SearchBar, FilterTabs, CommandSearchModal (Ctrl+K)
+│   ├── search/     # SearchBar, FilterTabs
 │   ├── notifications/ # NotificationBell, NotificationPanel, NotificationItem
 │   ├── bulk/       # BulkActionBar, SelectAllCheckbox
 │   ├── timeline/   # TimelineView
@@ -110,7 +110,6 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 - **Timeline & Activity Log** — visualisasi kalender interaktif dan riwayat aktivitas (Create, Edit, Move, Delete) secara kronologis
 - **Dark & Light Mode** — Pengaturan tema tampilan (tersimpan otomatis) yang disempurnakan dengan *custom variant* Tailwind CSS v4.
 - **Notification System** — Notifikasi otomatis berdasarkan due date task (overdue, due today, deadline approaching). Lonceng di TopNav menampilkan unread count; klik membuka panel slide-out dengan grouping Today & Earlier. Read status dipersist di localStorage. Menggunakan React Query (optimistic mark-read) + Axios mock API.
-- **Command Search (Ctrl+K)** — Command palette ala VS Code/Spotlight. Cari task by ticket ID, judul, atau deskripsi; navigasi cepat ke Board, Timeline, Settings. Full keyboard navigation (↑↓/Enter/Esc).
 
 ---
 
@@ -148,10 +147,7 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 7. **Sistem Notifikasi Berbasis Due Date**
    Notifikasi tidak memerlukan cronjob atau backend scheduler. Setiap kali React Query me-refetch endpoint `/notifications`, mock API membaca task dari localStorage dan menghasilkan notifikasi berdasarkan due date secara real-time. Read status di-persist di localStorage terpisah agar tidak hilang saat refresh. Arsitektur ini mengikuti pola tiga lapisan yang sama: UI (`NotificationBell/Panel/Item`) → React Query (`useNotifications`, optimistic mark-read) → Mock API (`notification.mock.ts`).
 
-8. **Command Search dengan cmdk + @base-ui/react/dialog**
-   Implementasi command palette (Ctrl+K) awalnya dicoba secara manual dengan positioning absolut dan overlay kustom, namun hasilnya inkonsisten — dialog kerap muncul di pojok kiri bawah, area abu-abu di atas dialog mengganggu, dan backdrop blur tidak bekerja. Setelah iterasi, diputuskan menggunakan library `cmdk` untuk keyboard navigation & fuzzy filtering, dibungkus dalam `@base-ui/react/dialog` (Dialog.Root → Portal → Backdrop + Popup) untuk menangani overlay, backdrop-blur, z-index, focus trap, dan portal rendering secara native. Pendekatan ini meniru perilaku Spotlight/VS Code: dialog muncul di 25% dari atas layar dengan backdrop transparan blur, navigasi penuh via keyboard (↑↓/Enter/Esc), pencarian fuzzy terhadap ticket ID & judul task, serta tidak konflik dengan Sheet Mobile Drawer.
-
-9. **Sistem Sidebar Mobile (Drawer)**
+8. **Sistem Sidebar Mobile (Drawer)**
    Agar aplikasi terasa *native* layaknya aplikasi betulan di *smartphone*, saya mengganti panel samping biasa dengan komponen *Drawer/Sheet* bergaya *off-canvas* yang diadaptasi dari ekosistem ShadCN UI (ditenagai oleh `@base-ui/react/dialog`). Solusi ini memecahkan masalah *overlap layout* dan z-index kompleks yang sering terjadi pada Tailwind murni, sekaligus menyediakan *accessibility* bawaan, fokus trap, dan animasi *slide-in* yang sangat mulus.
 
 ---
