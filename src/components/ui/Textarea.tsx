@@ -1,7 +1,7 @@
 import { forwardRef, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from 'react'
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  label?: string
+  label?: ReactNode
   error?: string
 }
 
@@ -27,7 +27,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 Textarea.displayName = 'Textarea'
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  label?: string
+  label?: ReactNode
   error?: string
   children: ReactNode
 }

@@ -26,7 +26,7 @@ export function TaskFormModal({
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
     defaultValues: {
@@ -64,8 +64,9 @@ export function TaskFormModal({
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <Input
           id="title"
-          label="Judul"
+          label={<span>Judul <span className="text-red-500">*</span></span>}
           placeholder="Masukkan judul task"
+          required
           error={errors.title?.message}
           {...register('title')}
         />
@@ -79,7 +80,7 @@ export function TaskFormModal({
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Select id="status" label="Status" {...register('status')}>
+          <Select id="status" label={<span>Status <span className="text-red-500">*</span></span>} error={errors.status?.message} {...register('status')}>
             <option value="todo">To Do</option>
             <option value="in_progress">In Progress</option>
             <option value="done">Done</option>
@@ -96,7 +97,8 @@ export function TaskFormModal({
         <Input
           id="dueDate"
           type="date"
-          label="Due Date (opsional)"
+          label={<span>Due Date <span className="text-red-500">*</span></span>}
+          required
           error={errors.dueDate?.message}
           {...register('dueDate')}
         />
@@ -105,7 +107,7 @@ export function TaskFormModal({
           <Button type="button" variant="secondary" onClick={onClose}>
             Batal
           </Button>
-          <Button type="submit" isLoading={createTask.isPending}>
+          <Button type="submit" isLoading={createTask.isPending} disabled={!isValid}>
             Simpan Task
           </Button>
         </div>

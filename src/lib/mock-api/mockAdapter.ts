@@ -19,6 +19,11 @@ import {
   isValidToken,
   validateCredentials,
 } from '@/lib/mock-api/auth.mock'
+import {
+  getNotificationsWithReadStatus,
+  markNotificationRead,
+  markAllNotificationsRead,
+} from '@/lib/mock-api/notification.mock'
 import type { CreateTaskInput, Task, UpdateTaskInput } from '@/types/task.types'
 
 const MIN_DELAY = 800
@@ -227,6 +232,21 @@ async function handleRequest(
       }
       return createResponse(config, { success: true })
     }
+  }
+
+  if (url === '/notifications' && method === 'get') {
+    return createResponse(config, getNotificationsWithReadStatus())
+  }
+
+  if (url === '/notifications/read-all' && method === 'patch') {
+    markAllNotificationsRead()
+    return createResponse(config, { success: true })
+  }
+
+  const notificationMatch = url.match(/^\/notifications\/([^/]+)\/read$/)
+  if (notificationMatch && method === 'patch') {
+    markNotificationRead(notificationMatch[1])
+    return createResponse(config, { success: true })
   }
 
   return createErrorResponse(config, 404, 'Endpoint tidak ditemukan')

@@ -21,9 +21,9 @@ export type SignupFormValues = z.infer<typeof signupSchema>
 export const taskSchema = z.object({
   title: z.string().min(1, 'Judul task wajib diisi').max(120, 'Judul maksimal 120 karakter'),
   description: z.string().max(500, 'Deskripsi maksimal 500 karakter').optional(),
-  status: z.enum(['todo', 'in_progress', 'done']),
+  status: z.enum(['todo', 'in_progress', 'done'], { required_error: 'Status wajib dipilih' }),
   priority: z.enum(['', 'low', 'medium', 'high']).optional(),
-  dueDate: z.string().optional(),
+  dueDate: z.string().min(1, 'Due date wajib diisi'),
 })
 
 export type TaskFormValues = z.infer<typeof taskSchema>
@@ -41,6 +41,6 @@ export function parseTaskFormValues(values: TaskFormValues) {
     description: values.description || undefined,
     status: values.status,
     priority,
-    dueDate: values.dueDate || undefined,
+    dueDate: values.dueDate,
   }
 }
