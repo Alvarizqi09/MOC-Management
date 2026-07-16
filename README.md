@@ -2,10 +2,17 @@
 
 Aplikasi manajemen task berbasis Kanban (gaya Trello/Jira) untuk **Master Online Community (MOC)** — technical test Frontend Developer.
 
+**🔗 Live Demo:** [https://moc-management-alva.vercel.app/board](https://moc-management-alva.vercel.app)
+
 > **⚠️ PERHATIAN UNTUK PENILAI (TESTER):**  
 > Aplikasi ini sengaja disimulasikan memiliki **10% kemungkinan *error* (gagal)** setiap kali ada action untuk membuat, mengedit, atau menghapus task (Mutasi). Hal ini dibuat secara sengaja di dalam *Mock API Layer* untuk mendemonstrasikan fitur *Error Handling*, *Toast Notification*, dan ***Rollback* otomatis** pada *Optimistic Update*. Jadi, jika sewaktu-waktu muncul notifikasi merah "Gagal menyimpan/memperbarui task", **itu bukanlah sebuah *bug***, melainkan fitur simulasi server. Silakan coba klik sekali lagi.
 
 ## Menjalankan Aplikasi
+
+### Opsi 1 — Live Demo (Vercel)
+Buka langsung: [https://moc-management-alva.vercel.app/board](https://moc-management-alva.vercel.app/board)
+
+### Opsi 2 — Lokal
 
 ```bash
 npm install
