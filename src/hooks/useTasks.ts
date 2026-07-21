@@ -156,7 +156,10 @@ export function useDeleteTask() {
       await apiClient.delete(`/tasks/${id}`)
       return id
     },
-    onSuccess: () => {
+    onSuccess: (deletedId) => {
+      queryClient.setQueryData<Task[]>(TASKS_QUERY_KEY, (oldTasks) => {
+        return oldTasks?.filter((task) => task.id !== deletedId)
+      })
       queryClient.invalidateQueries({ queryKey: TASKS_QUERY_KEY })
       queryClient.invalidateQueries({ queryKey: EVENTS_QUERY_KEY })
       toast.success('Task berhasil dihapus')
