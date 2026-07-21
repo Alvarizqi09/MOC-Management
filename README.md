@@ -2,10 +2,17 @@
 
 Aplikasi manajemen task berbasis Kanban (gaya Trello/Jira) untuk **Master Online Community (MOC)** — technical test Frontend Developer.
 
+**🔗 Live Demo:** [https://moc-management-alva.vercel.app/board](https://moc-management-alva.vercel.app)
+
 > **⚠️ PERHATIAN UNTUK PENILAI (TESTER):**  
-> Aplikasi ini sengaja disimulasikan memiliki **10% kemungkinan *error* (gagal)** setiap kali Anda membuat, mengedit, atau menghapus task (Mutasi). Hal ini dibuat secara sengaja di dalam *Mock API Layer* untuk mendemonstrasikan fitur *Error Handling*, *Toast Notification*, dan ***Rollback* otomatis** pada *Optimistic Update*. Jadi, jika sewaktu-waktu Anda mendapat notifikasi merah "Gagal menyimpan/memperbarui task", **itu bukanlah sebuah *bug***, melainkan fitur simulasi server. Silakan coba klik sekali lagi.
+> Aplikasi ini sengaja disimulasikan memiliki **10% kemungkinan *error* (gagal)** setiap kali ada action untuk membuat, mengedit, atau menghapus task (Mutasi). Hal ini dibuat secara sengaja di dalam *Mock API Layer* untuk mendemonstrasikan fitur *Error Handling*, *Toast Notification*, dan ***Rollback* otomatis** pada *Optimistic Update*. Jadi, jika sewaktu-waktu muncul notifikasi merah "Gagal menyimpan/memperbarui task", **itu bukanlah sebuah *bug***, melainkan fitur simulasi server. Silakan coba klik sekali lagi.
 
 ## Menjalankan Aplikasi
+
+### Opsi 1 — Live Demo (Vercel)
+Buka langsung: [https://moc-management-alva.vercel.app/board](https://moc-management-alva.vercel.app/board)
+
+### Opsi 2 — Lokal
 
 ```bash
 npm install
@@ -21,7 +28,7 @@ Buka [http://localhost:5173](http://localhost:5173)
 | Username | `admin`    |
 | Password | `admin123` |
 
-Atau Anda juga dapat mendaftar (Sign Up) untuk membuat kredensial baru.
+terdapat juga fitur (Sign Up) untuk membuat kredensial baru.
 
 ### Scripts
 
@@ -60,6 +67,7 @@ src/
 │   ├── board/      # KanbanBoard, KanbanColumn, TaskCard
 │   ├── task/       # TaskFormModal, TaskEditModal
 │   ├── search/     # SearchBar, FilterTabs
+│   ├── notifications/ # NotificationBell, NotificationPanel, NotificationItem
 │   ├── bulk/       # BulkActionBar, SelectAllCheckbox
 │   ├── timeline/   # TimelineView
 │   ├── layout/     # Sidebar, DashboardLayout, ProtectedRoute
@@ -81,8 +89,8 @@ Komponen murni presentational + interaksi. Tidak pernah memanggil `localStorage`
 
 ### State Layer (`store/` + `hooks/`)
 
-- **Zustand**: sesi auth (persist), filter pencarian/status, seleksi bulk
-- **React Query**: data task, loading/error state, cache invalidation, optimistic updates dengan rollback
+- **Zustand**: sesi auth (persist), filter pencarian/status, seleksi bulk, UI notification panel
+- **React Query**: data task & notifikasi, loading/error state, cache invalidation, optimistic updates dengan rollback
 
 ### Mock API Layer (`lib/mock-api/`)
 
@@ -91,7 +99,7 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 - Delay 800–1000ms per request
 - ~10% error rate pada mutasi (create/update/delete)
 - Validasi token mock via axios interceptor
-- Mock routing untuk login, registrasi (signup), dan CRUD task
+- Mock routing untuk login, registrasi (signup), CRUD task, dan notifikasi (generate dari due date task)
 
 ---
 
@@ -108,6 +116,7 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 - **Bulk actions** — multi-select, tandai selesai / hapus sekaligus
 - **Timeline & Activity Log** — visualisasi kalender interaktif dan riwayat aktivitas (Create, Edit, Move, Delete) secara kronologis
 - **Dark & Light Mode** — Pengaturan tema tampilan (tersimpan otomatis) yang disempurnakan dengan *custom variant* Tailwind CSS v4.
+- **Notification System** — Notifikasi otomatis berdasarkan due date task (overdue, due today, deadline approaching). Lonceng di TopNav menampilkan unread count; klik membuka panel slide-out dengan grouping Today & Earlier. Read status dipersist di localStorage. Menggunakan React Query (optimistic mark-read) + Axios mock API.
 
 ---
 
@@ -118,6 +127,7 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 3. **Data task** disimpan di `localStorage` browser — clearing storage = kehilangan data.
 4. **Error simulasi 10%** hanya pada mutasi, untuk demonstrasi error handling & rollback.
 5. **Filter & search** diterapkan di memori (client-side) terhadap cache React Query, bukan query ulang ke API.
+6. **Notifikasi** digenerate dari data task di localStorage setiap kali endpoint `GET /notifications` dipanggil. Read status dipersist secara terpisah di localStorage key `taskflow_notifications_read`.
 
 ---
 
@@ -141,7 +151,10 @@ Satu-satunya lapisan yang berinteraksi dengan `storage/db.ts`:
 6. **Keputusan Desain & Estetika Visual** 
    Penggunaan palet warna utama bernuansa hangat (*orange-500* hingga *orange-600*) dipilih secara khusus untuk merepresentasikan dan selaras dengan identitas *brand* MOC (Master Online Community). Warna oranye ini diaplikasikan secara hati-hati sebagai aksen kuat pada elemen-elemen interaktif (*Call to Action*, tombol utama, garis aktif) di atas fondasi warna latar yang bersih dan netral (*slate/white*). Pendekatan ini membuat aplikasi terasa premium, tidak *generic*, dan secara visual langsung memancarkan identitas "MOC".
 
-7. **Sistem Sidebar Mobile (Drawer)**
+7. **Sistem Notifikasi Berbasis Due Date**
+   Notifikasi tidak memerlukan cronjob atau backend scheduler. Setiap kali React Query me-refetch endpoint `/notifications`, mock API membaca task dari localStorage dan menghasilkan notifikasi berdasarkan due date secara real-time. Read status di-persist di localStorage terpisah agar tidak hilang saat refresh. Arsitektur ini mengikuti pola tiga lapisan yang sama: UI (`NotificationBell/Panel/Item`) → React Query (`useNotifications`, optimistic mark-read) → Mock API (`notification.mock.ts`).
+
+8. **Sistem Sidebar Mobile (Drawer)**
    Agar aplikasi terasa *native* layaknya aplikasi betulan di *smartphone*, saya mengganti panel samping biasa dengan komponen *Drawer/Sheet* bergaya *off-canvas* yang diadaptasi dari ekosistem ShadCN UI (ditenagai oleh `@base-ui/react/dialog`). Solusi ini memecahkan masalah *overlap layout* dan z-index kompleks yang sering terjadi pada Tailwind murni, sekaligus menyediakan *accessibility* bawaan, fokus trap, dan animasi *slide-in* yang sangat mulus.
 
 ---

@@ -24,7 +24,7 @@ export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isValid },
   } = useForm<TaskFormValues>({
     resolver: zodResolver(taskSchema),
   })
@@ -81,7 +81,7 @@ export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <Input
           id="edit-title"
-          label="Judul"
+          label={<span>Judul <span className="text-red-500">*</span></span>}
           error={errors.title?.message}
           {...register('title')}
         />
@@ -94,7 +94,7 @@ export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
         />
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Select id="edit-status" label="Status" {...register('status')}>
+          <Select id="edit-status" label={<span>Status <span className="text-red-500">*</span></span>} error={errors.status?.message} {...register('status')}>
             <option value="todo">To Do</option>
             <option value="in_progress">In Progress</option>
             <option value="done">Done</option>
@@ -111,19 +111,19 @@ export function TaskEditModal({ task, isOpen, onClose }: TaskEditModalProps) {
         <Input
           id="edit-dueDate"
           type="date"
-          label="Due Date"
+          label={<span>Due Date <span className="text-red-500">*</span></span>}
           error={errors.dueDate?.message}
           {...register('dueDate')}
         />
 
-        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800 pt-4">
+        <div className="flex flex-wrap items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-700/50 pt-4">
           <Button type="button" variant="ghost" onClick={onClose}>
             Tutup
           </Button>
           <Button
             type="submit"
             isLoading={optimisticUpdate.isPending}
-            disabled={!isDirty || isLoading}
+            disabled={!isValid || !isDirty || isLoading}
           >
             Simpan Perubahan
           </Button>

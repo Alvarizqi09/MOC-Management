@@ -31,7 +31,7 @@ export interface CreateTaskInput {
   description?: string
   status?: TaskStatus
   priority?: TaskPriority
-  dueDate?: string
+  dueDate: string
 }
 
 export interface UpdateTaskInput {

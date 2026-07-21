@@ -19,11 +19,11 @@ export function Sidebar({ variant = 'desktop' }: { variant?: 'desktop' | 'mobile
 
   return (
     <aside
-      className={`flex h-full flex-col border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 ${
+      className={`flex h-full flex-col border-r border-slate-200 dark:border-slate-700/50 bg-white dark:bg-slate-900 ${
         variant === 'mobile' ? 'w-full' : 'hidden md:flex w-64'
       }`}
     >
-      <div className="flex h-16 shrink-0 items-center border-b border-slate-100 px-6 dark:border-slate-800">
+      <div className="flex h-16 shrink-0 items-center border-b border-slate-100 dark:border-slate-700/50 px-6">
         <div className="flex items-center gap-3">
           <img src={logoImage} alt="TaskFlow" className="h-8 w-auto dark:hidden" />
           <img src={logoDarkImage} alt="TaskFlow" className="h-8 w-auto hidden dark:block" />
@@ -48,7 +48,7 @@ export function Sidebar({ variant = 'desktop' }: { variant?: 'desktop' | 'mobile
               `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                 isActive
                   ? 'bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
-                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'
               }`
             }
           >
@@ -78,7 +78,7 @@ export function Sidebar({ variant = 'desktop' }: { variant?: 'desktop' | 'mobile
               `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                 isActive
                   ? 'bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
-                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-100'
+                  : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'
               }`
             }
           >
@@ -88,8 +88,8 @@ export function Sidebar({ variant = 'desktop' }: { variant?: 'desktop' | 'mobile
         </nav>
       </div>
 
-      <div className="border-t border-slate-100 dark:border-slate-800 p-4 shrink-0">
-        <div className="mb-4 flex items-center gap-3 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3">
+      <div className="border-t border-slate-100 dark:border-slate-700/50 p-4 shrink-0">
+        <div className="mb-4 flex items-center gap-3 rounded-lg bg-slate-50 dark:bg-slate-800/40 p-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-400">
             <User className="h-5 w-5" />
           </div>

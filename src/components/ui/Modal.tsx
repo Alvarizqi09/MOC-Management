@@ -45,18 +45,18 @@ export function Modal({
         aria-hidden
       />
       <div
-        className={`relative w-full ${sizeClasses[size]} animate-zoom-in rounded-xl bg-white dark:bg-slate-900 shadow-xl dark:shadow-slate-900/50 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]`}
+        className={`relative w-full ${sizeClasses[size]} animate-zoom-in rounded-xl bg-white dark:bg-slate-800 shadow-xl dark:shadow-slate-900/50 transition-all duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]`}
         role="dialog"
         aria-modal
         aria-labelledby="modal-title"
       >
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-700/50 px-6 py-4">
           <h2 id="modal-title" className="text-lg font-semibold text-slate-900 dark:text-white">
             {title}
           </h2>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 dark:text-slate-500 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-slate-300"
+            className="rounded-lg p-1.5 text-slate-400 dark:text-slate-500 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-slate-700/60 hover:text-slate-600 dark:hover:text-slate-300"
             aria-label="Tutup"
           >
             <X className="h-5 w-5" />
